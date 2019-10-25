@@ -1,2 +1,2 @@
 # LP-Golang
-Trabalho de Linguagens de Programação UnB Turma B - Grupo 1
+Trabalho de Linguagens de Programação Turma B UnB - Grupo 1
