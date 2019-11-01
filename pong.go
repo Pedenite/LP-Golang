@@ -25,11 +25,52 @@ type ball struct {
 	color  color //o go permite se ter uma variavel com o mesmo nome q o tipo
 }
 
+func (ball *ball) draw(pixels []byte) {
+	for y := -ball.radius; y < ball.radius; y++ {
+		for x := -ball.radius; x < ball.radius; x++ {
+			if x*x+y*y < ball.radius*ball.radius {
+				setPixel(int(ball.x)+x, int(ball.y)+y, ball.color, pixels)
+			}
+		}
+	}
+}
+
+func (ball *ball) update() {
+	ball.x += ball.xv
+	ball.y += ball.yv
+
+	if ball.y < 0 { //collision top and bottom
+		ball.yv = -ball.yv
+	} else if int(ball.y) > winHeight {
+		ball.yv = -ball.yv
+	}
+}
+
 type paddle struct {
 	pos
 	w     int
 	h     int
 	color color
+}
+
+func (paddle *paddle) draw(pixels []byte) {
+	startX := int(paddle.x) - paddle.w/2
+	startY := int(paddle.y) - paddle.h/2 //pegara o pixel mais a esquerda da primeira linha de pixels
+
+	for y := 0; y < paddle.h; y++ {
+		for x := 0; x < paddle.w; x++ {
+			setPixel(startX+x, startY+y, paddle.color, pixels)
+		}
+	}
+}
+
+func (paddle *paddle) update(keyState []uint8) {
+	if keyState[sdl.SCANCODE_UP] != 0 {
+		paddle.y--
+	}
+	if keyState[sdl.SCANCODE_DOWN] != 0 {
+		paddle.y++
+	}
 }
 
 func setPixel(x, y int, c color, pixel []byte) {
@@ -69,9 +110,7 @@ func main() {
 
 	pixels := make([]byte, winWidth*winHeight*4)
 
-	//sdl.Delay(2000)
-
-	for y := 0; y < winHeight; y++ {
+	/*for y := 0; y < winHeight; y++ {
 		for x := 0; x < winWidth; x++ {
 			//setPixel(x, y, color{255, 0, 0}, pixels) //torna os pixels vermelhos
 			setPixel(x, y, color{byte(x % 255), byte(y % 255), 0}, pixels)
@@ -81,6 +120,29 @@ func main() {
 	tex.Update(nil, pixels, winWidth*4) //esse 4 significa quantos bytes por pixel -> 1 R, 1 G, 1 B e 1 A
 	renderer.Copy(tex, nil, nil)
 	renderer.Present()
+	sdl.Delay(2000)*/
 
-	sdl.Delay(2000)
+	player1 := paddle{pos{100, 100}, 20, 100, color{255, 255, 255}}
+	ball := ball{pos{300, 300}, 20, 0, 0, color{255, 255, 255}}
+
+	keyState := sdl.GetKeyboardState()
+
+	for { //Game loop
+		/*for event := sdl.PollEvent(); event != nil; sdl.PollEvent() {
+			switch event.(type) {
+			case *sdl.QuitEvent:
+				return
+			}
+		}*/
+		player1.draw(pixels)
+		player1.update(keyState)
+		ball.draw(pixels)
+
+		tex.Update(nil, pixels, winWidth*4) //esse 4 significa quantos bytes por pixel -> 1 R, 1 G, 1 B e 1 A
+		renderer.Copy(tex, nil, nil)
+		renderer.Present()
+		sdl.Delay(10)
+	}
+
+	//sdl.Delay(2000)
 }
