@@ -8,6 +8,8 @@ import (
 
 const winWidth int = 800
 const winHeight int = 600
+const velPlayer float32 = 5
+const initVelBall float32 = 5
 
 type color struct {
 	r, g, b byte
@@ -18,12 +20,13 @@ type pos struct {
 }
 
 /////////////////////////////////////////Bola////////////////////////////////////////////
+
 type ball struct {
-	pos    //isto eh tipo uma heranca em go, em que todos os atributos do struct serao herdados por este
-	radius int
-	yv     float32
-	xv     float32
-	color  color //o go permite se ter uma variavel com o mesmo nome q o tipo
+	pos            //isto eh tipo uma heranca em go, em que todos os atributos do struct serao herdados por este
+	radius int     //raio
+	yv     float32 //velocidade coordenada y
+	xv     float32 //velocidade coordenada x
+	color  color   //o go permite se ter uma variavel com o mesmo nome q o tipo
 }
 
 func (ball *ball) draw(pixels []byte) {
@@ -36,14 +39,26 @@ func (ball *ball) draw(pixels []byte) {
 	}
 }
 
-func (ball *ball) update() {
+func (ball *ball) update(paddle1 *paddle, paddle2 *paddle) {
 	ball.x += ball.xv
 	ball.y += ball.yv
 
-	if ball.y < 0 { //collisao cima e baixo
+	if int(ball.y)+ball.radius < 0 || int(ball.y)+ball.radius > winHeight { //collisao cima e baixo
 		ball.yv = -ball.yv
-	} else if int(ball.y) > winHeight {
-		ball.yv = -ball.yv
+	}
+	if int(ball.x)+ball.radius < 0 || int(ball.x)+ball.radius > winWidth {
+		ball.x = float32(winWidth) / 2
+		ball.y = float32(winHeight) / 2
+	}
+	if ball.x-float32(ball.radius) < paddle1.x+float32(paddle1.w)/2 {
+		if ball.y > paddle1.y-float32(paddle1.h)/2 && ball.y < paddle1.y+float32(paddle1.h)/2 {
+			ball.xv = -ball.xv
+		}
+	}
+	if ball.x+float32(ball.radius) > paddle2.x-float32(paddle2.w)/2 {
+		if ball.y > paddle2.y-float32(paddle2.h)/2 && ball.y < paddle2.y+float32(paddle2.h)/2 {
+			ball.xv = -ball.xv
+		}
 	}
 }
 
@@ -51,10 +66,10 @@ func (ball *ball) update() {
 
 ///////////////////////////////////Player////////////////////////////////////////////////////////
 type paddle struct {
-	pos       //posicao inicial
-	w     int //largura
-	h     int //altura
-	color color
+	pos         //posicao inicial
+	w     int   //largura
+	h     int   //altura
+	color color //cor
 }
 
 func (paddle *paddle) draw(pixels []byte) {
@@ -68,13 +83,25 @@ func (paddle *paddle) draw(pixels []byte) {
 	}
 }
 
-func (paddle *paddle) update(keyState []uint8) {
+func (paddle *paddle) update1(keyState []uint8) {
 	if keyState[sdl.SCANCODE_UP] != 0 {
-		paddle.y--
+		paddle.y -= velPlayer
 	}
 	if keyState[sdl.SCANCODE_DOWN] != 0 {
-		paddle.y++
+		paddle.y += velPlayer
 	}
+}
+func (paddle *paddle) update2(keyState []uint8) {
+	if keyState[sdl.SCANCODE_W] != 0 {
+		paddle.y -= velPlayer
+	}
+	if keyState[sdl.SCANCODE_S] != 0 {
+		paddle.y += velPlayer
+	}
+}
+
+func (paddle *paddle) aiUpdate(ball *ball) {
+	paddle.y = ball.y
 }
 
 ////////////////////////////////////////////fimPlayer///////////////////////////////////////
@@ -97,7 +124,7 @@ func setPixel(x, y int, c color, pixel []byte) {
 func main() {
 
 	///////////////////////////////////preparando a janela a ser aberta e poder printar pixels/////////////////////////////
-	window, err := sdl.CreateWindow("Testando SDL2", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, int32(winWidth), int32(winHeight), sdl.WINDOW_SHOWN)
+	window, err := sdl.CreateWindow("PONG", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, int32(winWidth), int32(winHeight), sdl.WINDOW_SHOWN)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -123,8 +150,9 @@ func main() {
 
 	keyState := sdl.GetKeyboardState()
 
-	player1 := paddle{pos{100, 100}, 10, 75, color{255, 255, 255}}
-	ball := ball{pos{300, 300}, 10, 0, 0, color{255, 255, 255}}
+	player1 := paddle{pos{50, 100}, 10, 75, color{255, 0, 255}}
+	player2 := paddle{pos{float32(winWidth) - 50, 100}, 10, 75, color{255, 255, 0}}
+	ball := ball{pos{float32(winWidth) / 2, float32(winHeight) / 2}, 10, initVelBall, initVelBall, color{255, 255, 255}}
 
 	for { //Game loop
 		//necessario para input do teclado
@@ -136,9 +164,12 @@ func main() {
 		}
 		clear(pixels)
 
-		player1.update(keyState)
+		player1.update1(keyState)
+		player2.update2(keyState)
+		ball.update(&player1, &player2)
 
 		player1.draw(pixels)
+		player2.draw(pixels)
 		ball.draw(pixels)
 
 		tex.Update(nil, pixels, winWidth*4) //esse 4 significa quantos bytes por pixel -> 1 R, 1 G, 1 B e 1 A
