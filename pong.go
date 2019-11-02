@@ -39,7 +39,7 @@ func (ball *ball) update() {
 	ball.x += ball.xv
 	ball.y += ball.yv
 
-	if ball.y < 0 { //collision top and bottom
+	if ball.y < 0 { //collisao cima e baixo
 		ball.yv = -ball.yv
 	} else if int(ball.y) > winHeight {
 		ball.yv = -ball.yv
@@ -47,9 +47,9 @@ func (ball *ball) update() {
 }
 
 type paddle struct {
-	pos
-	w     int
-	h     int
+	pos       //posicao inicial
+	w     int //largura
+	h     int //altura
 	color color
 }
 
@@ -67,9 +67,17 @@ func (paddle *paddle) draw(pixels []byte) {
 func (paddle *paddle) update(keyState []uint8) {
 	if keyState[sdl.SCANCODE_UP] != 0 {
 		paddle.y--
+		//fmt.Println("cima")
 	}
 	if keyState[sdl.SCANCODE_DOWN] != 0 {
 		paddle.y++
+		//fmt.Println("baixo")
+	}
+}
+
+func clear(pixels []byte) {
+	for i := range pixels {
+		pixels[i] = 0
 	}
 }
 
@@ -106,10 +114,9 @@ func main() {
 		return
 	}
 	defer tex.Destroy()
-	////////////////////////////////////////////fim preparacao///////////////////////////////////////////
 
 	pixels := make([]byte, winWidth*winHeight*4)
-
+	////////////////////////////////////////////fim preparacao///////////////////////////////////////////
 	/*for y := 0; y < winHeight; y++ {
 		for x := 0; x < winWidth; x++ {
 			//setPixel(x, y, color{255, 0, 0}, pixels) //torna os pixels vermelhos
@@ -122,26 +129,30 @@ func main() {
 	renderer.Present()
 	sdl.Delay(2000)*/
 
-	player1 := paddle{pos{100, 100}, 20, 100, color{255, 255, 255}}
-	ball := ball{pos{300, 300}, 20, 0, 0, color{255, 255, 255}}
-
 	keyState := sdl.GetKeyboardState()
 
+	player1 := paddle{pos{100, 100}, 10, 75, color{255, 255, 255}}
+	ball := ball{pos{300, 300}, 10, 0, 0, color{255, 255, 255}}
+
 	for { //Game loop
-		/*for event := sdl.PollEvent(); event != nil; sdl.PollEvent() {
+		//necessario para input do teclado
+		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {
 			case *sdl.QuitEvent:
 				return
 			}
-		}*/
-		player1.draw(pixels)
+		}
+		clear(pixels)
+
 		player1.update(keyState)
+
+		player1.draw(pixels)
 		ball.draw(pixels)
 
 		tex.Update(nil, pixels, winWidth*4) //esse 4 significa quantos bytes por pixel -> 1 R, 1 G, 1 B e 1 A
 		renderer.Copy(tex, nil, nil)
 		renderer.Present()
-		sdl.Delay(10)
+		sdl.Delay(16)
 	}
 
 	//sdl.Delay(2000)
