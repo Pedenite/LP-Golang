@@ -17,6 +17,7 @@ type pos struct {
 	x, y float32
 }
 
+/////////////////////////////////////////Bola////////////////////////////////////////////
 type ball struct {
 	pos    //isto eh tipo uma heranca em go, em que todos os atributos do struct serao herdados por este
 	radius int
@@ -46,6 +47,9 @@ func (ball *ball) update() {
 	}
 }
 
+/////////////////////////////////////fimBola/////////////////////////////////////////////////////
+
+///////////////////////////////////Player////////////////////////////////////////////////////////
 type paddle struct {
 	pos       //posicao inicial
 	w     int //largura
@@ -67,14 +71,13 @@ func (paddle *paddle) draw(pixels []byte) {
 func (paddle *paddle) update(keyState []uint8) {
 	if keyState[sdl.SCANCODE_UP] != 0 {
 		paddle.y--
-		//fmt.Println("cima")
 	}
 	if keyState[sdl.SCANCODE_DOWN] != 0 {
 		paddle.y++
-		//fmt.Println("baixo")
 	}
 }
 
+////////////////////////////////////////////fimPlayer///////////////////////////////////////
 func clear(pixels []byte) {
 	for i := range pixels {
 		pixels[i] = 0
@@ -115,19 +118,8 @@ func main() {
 	}
 	defer tex.Destroy()
 
-	pixels := make([]byte, winWidth*winHeight*4)
+	pixels := make([]byte, winWidth*winHeight*4) //cria um slice para os pixels
 	////////////////////////////////////////////fim preparacao///////////////////////////////////////////
-	/*for y := 0; y < winHeight; y++ {
-		for x := 0; x < winWidth; x++ {
-			//setPixel(x, y, color{255, 0, 0}, pixels) //torna os pixels vermelhos
-			setPixel(x, y, color{byte(x % 255), byte(y % 255), 0}, pixels)
-		}
-	}
-
-	tex.Update(nil, pixels, winWidth*4) //esse 4 significa quantos bytes por pixel -> 1 R, 1 G, 1 B e 1 A
-	renderer.Copy(tex, nil, nil)
-	renderer.Present()
-	sdl.Delay(2000)*/
 
 	keyState := sdl.GetKeyboardState()
 
