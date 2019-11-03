@@ -12,6 +12,16 @@ const winHeight int = 600
 const velPlayer float32 = 300
 const initVelBall float32 = 300
 
+//enum
+type gameState int
+
+const (
+	start gameState = iota
+	play
+)
+
+var state = start
+
 var nums = [][]byte{
 	{ //0
 		1, 1, 1,
@@ -104,20 +114,26 @@ func (ball *ball) update(paddle1 *paddle, paddle2 *paddle, elapsedTime float32) 
 		ball.x = float32(winWidth) / 2
 		ball.y = float32(winHeight) / 2
 		paddle2.score++
+		ball.xv = initVelBall
+		state = start
 	}
 	if int(ball.x)+ball.radius > winWidth {
 		ball.x = float32(winWidth) / 2
 		ball.y = float32(winHeight) / 2
 		paddle1.score++
+		ball.xv = -initVelBall
+		state = start
 	}
-	if ball.x-float32(ball.radius) < paddle1.x+float32(paddle1.w)/2 {
+	if ball.x-float32(ball.radius) < paddle1.x+float32(paddle1.w)/2 && ball.x+float32(ball.radius) > paddle1.x-float32(paddle1.w)/2 {
 		if ball.y > paddle1.y-float32(paddle1.h)/2 && ball.y < paddle1.y+float32(paddle1.h)/2 {
-			ball.xv = -ball.xv
+			ball.xv = -ball.xv + 10
+			ball.x = paddle1.x + float32(paddle1.w/2) + float32(ball.radius) //corrigir bugs
 		}
 	}
-	if ball.x+float32(ball.radius) > paddle2.x-float32(paddle2.w)/2 {
+	if ball.x+float32(ball.radius) > paddle2.x-float32(paddle2.w)/2 && ball.x-float32(ball.radius) < paddle2.x+float32(paddle2.w)/2 {
 		if ball.y > paddle2.y-float32(paddle2.h)/2 && ball.y < paddle2.y+float32(paddle2.h)/2 {
-			ball.xv = -ball.xv
+			ball.xv = -ball.xv - 10
+			ball.x = paddle2.x - float32(paddle2.w/2) - float32(ball.radius) //corrigir bugs
 		}
 	}
 }
@@ -149,18 +165,18 @@ func (paddle *paddle) draw(pixels []byte) {
 }
 
 func (paddle *paddle) update1(keyState []uint8, elapsedTime float32) {
-	if keyState[sdl.SCANCODE_UP] != 0 {
-		paddle.y -= paddle.speed * elapsedTime
-	}
-	if keyState[sdl.SCANCODE_DOWN] != 0 {
-		paddle.y += paddle.speed * elapsedTime
-	}
-}
-func (paddle *paddle) update2(keyState []uint8, elapsedTime float32) {
 	if keyState[sdl.SCANCODE_W] != 0 {
 		paddle.y -= paddle.speed * elapsedTime
 	}
 	if keyState[sdl.SCANCODE_S] != 0 {
+		paddle.y += paddle.speed * elapsedTime
+	}
+}
+func (paddle *paddle) update2(keyState []uint8, elapsedTime float32) {
+	if keyState[sdl.SCANCODE_UP] != 0 {
+		paddle.y -= paddle.speed * elapsedTime
+	}
+	if keyState[sdl.SCANCODE_DOWN] != 0 {
 		paddle.y += paddle.speed * elapsedTime
 	}
 }
@@ -218,8 +234,8 @@ func main() {
 	var frameStart time.Time
 	var elapsedTime float32 //time.Duration
 
-	player1 := paddle{pos{50, 100}, 10, 75, velPlayer, 0, color{255, 0, 255}}
-	player2 := paddle{pos{float32(winWidth) - 50, 100}, 10, 75, velPlayer, 0, color{255, 255, 0}}
+	player1 := paddle{pos{50, float32(winHeight) / 2}, 10, 75, velPlayer, 0, color{255, 0, 0}}
+	player2 := paddle{pos{float32(winWidth) - 50, float32(winHeight) / 2}, 10, 75, velPlayer, 0, color{255, 255, 0}}
 	ball := ball{pos{float32(winWidth) / 2, float32(winHeight) / 2}, 10, initVelBall, initVelBall, color{255, 255, 255}}
 
 	for { //Game loop
@@ -231,11 +247,21 @@ func main() {
 				return
 			}
 		}
-		clear(pixels)
 
-		player1.update1(keyState, elapsedTime)
-		player2.update2(keyState, elapsedTime)
-		ball.update(&player1, &player2, elapsedTime)
+		if state == play {
+			player1.update1(keyState, elapsedTime)
+			player2.update2(keyState, elapsedTime)
+			ball.update(&player1, &player2, elapsedTime)
+		} else if state == start {
+			if keyState[sdl.SCANCODE_SPACE] != 0 {
+				if player1.score == 3 || player2.score == 3 {
+					player1.score = 0
+					player2.score = 0
+				}
+				state = play
+			}
+		}
+		clear(pixels)
 
 		player1.draw(pixels)
 		player2.draw(pixels)
