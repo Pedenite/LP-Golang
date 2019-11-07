@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 const winWidth = 800
 const winHeight = 600
-const velPlayer = 5
+const velPlayer = 100
+const velTiro = 500
 
 var paredes = 100
 
@@ -55,18 +57,18 @@ func (aviao *aviao) draw(pixels []byte) {
 	}
 }
 
-func (aviao *aviao) update(keyState []uint8, wall1 *wall, wall2 *wall, pixels []uint8) {
+func (aviao *aviao) update(keyState []uint8, wall1 *wall, wall2 *wall, tiro *tiro, pixels []uint8, elapsedTime float32) {
 	if keyState[sdl.SCANCODE_UP] != 0 {
-		aviao.y -= aviao.v
+		aviao.y -= aviao.v * elapsedTime
 	}
 	if keyState[sdl.SCANCODE_DOWN] != 0 {
-		aviao.y += aviao.v
+		aviao.y += aviao.v * elapsedTime
 	}
 	if keyState[sdl.SCANCODE_LEFT] != 0 {
-		aviao.x -= aviao.v
+		aviao.x -= aviao.v * elapsedTime
 	}
 	if keyState[sdl.SCANCODE_RIGHT] != 0 {
-		aviao.x += aviao.v
+		aviao.x += aviao.v * elapsedTime
 	}
 
 	if aviao.x-float32(aviao.l/2) < wall1.x || aviao.x+float32(aviao.l/2) > wall2.x-float32(wall2.l) {
@@ -75,19 +77,34 @@ func (aviao *aviao) update(keyState []uint8, wall1 *wall, wall2 *wall, pixels []
 	}
 
 	if keyState[sdl.SCANCODE_SPACE] != 0 {
-		tiro := tiro{pos{aviao.x, aviao.y}, cor{0, 0, 0}, 10}
-		tiro.draw(pixels)
+		tiro.x = aviao.x
+		tiro.y = aviao.y - float32(aviao.a)/2
 	}
 }
 
 type tiro struct {
 	pos
 	cor
+	a int
+	l int
 	v float32
 }
 
 func (tiro *tiro) draw(pixels []uint8) {
-
+	inicioX := int(tiro.x) - tiro.l
+	inicioY := int(tiro.y) - tiro.a
+	for y := 0; y < tiro.a; y++ {
+		for x := 0; x < tiro.l; x++ {
+			setPixel(inicioX+x, inicioY+y, tiro.cor, pixels)
+		}
+	}
+}
+func (tiro *tiro) update(elapsedTime float32) {
+	tiro.y -= tiro.v * elapsedTime
+	if tiro.y < 0 {
+		tiro.x = 0
+		tiro.y = 0
+	}
 }
 
 func clear(pixels []byte, c cor) {
@@ -140,11 +157,17 @@ func main() {
 
 	keyState := sdl.GetKeyboardState()
 
+	var frameStart time.Time
+	var elapsedTime float32 //time.Duration
+
 	player := aviao{pos{winWidth / 2, winHeight * 3 / 4}, cor{150, 150, 0}, 20, 20, velPlayer}
 	wall1 := wall{pos{100, 0}, cor{0, 100, 0}, paredes}
 	wall2 := wall{pos{winWidth, 0}, cor{0, 100, 0}, paredes}
+	tiro := tiro{pos{0, 0}, cor{255, 255, 255}, 3, 3, velTiro}
 
 	for { //Game loop
+		frameStart = time.Now()
+
 		//necessario para input do teclado
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {
@@ -156,17 +179,20 @@ func main() {
 		wall1.draw(pixels)
 		wall2.draw(pixels)
 		player.draw(pixels)
+		tiro.draw(pixels)
 
-		player.update(keyState, &wall1, &wall2, pixels)
+		player.update(keyState, &wall1, &wall2, &tiro, pixels, elapsedTime)
+		tiro.update(elapsedTime)
 
 		tex.Update(nil, pixels, winWidth*4) //esse 4 significa quantos bytes por pixel -> 1 R, 1 G, 1 B e 1 A
 		renderer.Copy(tex, nil, nil)
 		renderer.Present()
 
-		/*wall1.x++
-		wall1.l++
-		wall2.l++*/
+		elapsedTime = float32(time.Since(frameStart).Seconds())
 
-		sdl.Delay(1)
+		if elapsedTime < .005 { //max fps = 200
+			sdl.Delay(5 - uint32(elapsedTime)/1000)
+			elapsedTime = float32(time.Since(frameStart).Seconds())
+		}
 	}
 }
