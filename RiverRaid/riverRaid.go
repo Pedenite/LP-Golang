@@ -13,6 +13,7 @@ const velPlayer = 100
 const velTiro = 500
 
 var paredes = 100
+var velMapa = 50
 
 type cor struct {
 	r, g, b byte
@@ -57,7 +58,7 @@ func (aviao *aviao) draw(pixels []byte) {
 	}
 }
 
-func (aviao *aviao) update(keyState []uint8, wall1 *wall, wall2 *wall, tiro *tiro, pixels []uint8, elapsedTime float32) {
+func (aviao *aviao) update(keyState []uint8, wall1 *wall, wall2 *wall, tiro *tiro, elapsedTime float32) {
 	if keyState[sdl.SCANCODE_UP] != 0 {
 		aviao.y -= aviao.v * elapsedTime
 	}
@@ -122,6 +123,36 @@ func clear(pixels []byte, c cor) {
 	}
 }
 
+type inimigo struct {
+	pos
+	cor
+	v    float32
+	a    int
+	l    int
+	vivo bool
+}
+
+func (inimigo *inimigo) draw(pixels []byte) {
+	inicioX := int(inimigo.x) - inimigo.l/2
+	inicioY := int(inimigo.y) - inimigo.a/2
+	if inimigo.vivo == true {
+		for y := 0; y < inimigo.a; y++ {
+			for x := 0; x < inimigo.l; x++ {
+				setPixel(inicioX+x, inicioY+y, inimigo.cor, pixels)
+			}
+		}
+	}
+}
+
+func (inimigo *inimigo) update(tiro *tiro, elapsedTime float32) {
+	inimigo.y += inimigo.v * elapsedTime
+	if inimigo.x-float32(inimigo.l) < tiro.x+float32(tiro.l) && inimigo.x+float32(inimigo.l) > tiro.x-float32(tiro.l) {
+		if inimigo.y+float32(inimigo.a) > tiro.y-float32(tiro.a) {
+			inimigo.vivo = false
+		}
+	}
+}
+
 func setPixel(x, y int, c cor, pixel []byte) {
 	index := (y*winWidth + x) * 4
 
@@ -164,6 +195,7 @@ func main() {
 	wall1 := wall{pos{100, 0}, cor{0, 100, 0}, paredes}
 	wall2 := wall{pos{winWidth, 0}, cor{0, 100, 0}, paredes}
 	tiro := tiro{pos{0, 0}, cor{255, 255, 255}, 3, 3, velTiro}
+	inimigo := inimigo{pos{400, 100}, cor{255, 0, 0}, float32(velMapa), 25, 100, true}
 
 	for { //Game loop
 		frameStart = time.Now()
@@ -180,8 +212,10 @@ func main() {
 		wall2.draw(pixels)
 		player.draw(pixels)
 		tiro.draw(pixels)
+		inimigo.draw(pixels)
 
-		player.update(keyState, &wall1, &wall2, &tiro, pixels, elapsedTime)
+		player.update(keyState, &wall1, &wall2, &tiro, elapsedTime)
+		inimigo.update(&tiro, elapsedTime)
 		tiro.update(elapsedTime)
 
 		tex.Update(nil, pixels, winWidth*4) //esse 4 significa quantos bytes por pixel -> 1 R, 1 G, 1 B e 1 A
