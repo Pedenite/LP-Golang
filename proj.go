@@ -18,7 +18,7 @@ func main() {
 	reader := bufio.NewReader(file)
 	for {
 		linha, err := reader.ReadString('\n')
-		linha = strings.TrimSpace(linha)
+		linha = strings.TrimSpace(linha) //Para eliminar espacos desnecessarios
 
 		frases = append(frases, linha)
 
