@@ -10,6 +10,42 @@ import (
 
 const MAX = 10
 
+type Palavra struct {
+	palavraOriginal string
+	palavraTraducao string
+	anterior        *Palavra
+	proxima         *Palavra
+}
+
+type ConjuntoPalavras struct {
+	tamanho int
+	inicio  *Palavra
+	fim     *Palavra
+}
+
+func (palavras *ConjuntoPalavras) Append(novaPalavra *Palavra) {
+	if palavras.tamanho == 0 {
+		palavras.inicio = novaPalavra
+		palavras.fim = novaPalavra
+	} else {
+		ultimaPalavra := palavras.fim
+		ultimaPalavra.proxima = novaPalavra
+		novaPalavra.anterior = ultimaPalavra
+		palavras.fim = novaPalavra
+	}
+	palavras.tamanho++
+}
+
+func (palavras *ConjuntoPalavras) Show() {
+	contador := 0
+	var palavraInicial = palavras.inicio
+	for contador < palavras.tamanho {
+		fmt.Printf("Palavra %v: %v\n", contador, palavraInicial)
+		palavraInicial = palavraInicial.proxima
+		contador++
+	}
+}
+
 func leArquivo(arquivo string) []string {
 	var frases []string
 	file, err := os.Open(arquivo)
@@ -39,6 +75,7 @@ func leArquivo(arquivo string) []string {
 }
 
 func main() {
+
 	var qtd int8 = 0
 	var userFile string
 	var frases []string
@@ -57,10 +94,23 @@ func main() {
 		}
 		qtd--
 	}
-
+	conjuntoP := &ConjuntoPalavras{}
+	var p1 string
+	var p2 string
 	i := 0
 	for range frases {
 		fmt.Println(frases[i])
+		if i%2 == 0 {
+			p1 = frases[i]
+			p2 = frases[i+1]
+			palavra := Palavra{
+				palavraOriginal: p1,
+				palavraTraducao: p2,
+			}
+			conjuntoP.Append(&palavra)
+		}
 		i++
 	}
+	conjuntoP.Show()
+
 }
