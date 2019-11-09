@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+// <<Main Section>>
+.main-section {
+  height: 100vh;
+  position: absolute;
+  width: 100%;
+  background-blend-mode: screen;
+  background-image:
+    linear-gradient(rgb(133, 124, 148), rgb(29, 26, 70)),
+    url('https://images.pexels.com/photos/6375/quote-chalk-think-words.jpg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  background-size: cover;
+}
+
+// <<BUTTON>
+.btn {
+  position: absolute;
+  margin-top: 2rem;
+  font-size: 2rem;
+  color: #eee;
+  background-color: rgb(43, 117, 117);
+  padding: .2rem 1rem;
+  text-decoration: none;
+  border-radius: 10rem;
+  box-shadow: rgba(0, 0, 0, .5) 0 .5rem 1.5rem; 
+}
+
+// <<CARD>>
+.row {
+  width: 30rem;
+  margin: 8rem auto;
+}
+
+.card {
+  perspective: 150rem;
+  -moz-perspective: 150rem;
+  position: relative;
+  width: 100%;
+  height: 75vh;
+
+  &__side {
+    position: absolute;
+    height: 75vh;
+    width: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 1) 0 .5rem 1.5rem;
+    border-radius: .3rem;
+    backface-visibility: hidden;
+    transition: all 1s;
+
+    &--front{
+      background-image: linear-gradient(to right, rgb(18, 18, 56), rgb(8, 21, 56));
+      color: #eee;
+    }
+
+    &--back{
+      transform: rotateY(180deg);
+
+      background-color: aquamarine;
+    }
+  }
+
+  &:hover &__side--front {
+    transform: rotateY(-180deg)
+  }
+
+  &:hover &__side--back {
+    transform: rotateY(0deg)
+  }
+
+  &__text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-transform: uppercase;
+    font-size: 1.8rem;
+  }
+  
+}
