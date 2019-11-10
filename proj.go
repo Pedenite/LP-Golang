@@ -5,17 +5,31 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
+    "strings"
+    
+    "encoding/json"
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 const MAX = 10
 
 type Palavra struct {
-	palavraOriginal string
-	palavraTraducao string
-	anterior        *Palavra
-	proxima         *Palavra
+	palavraOriginal string `json:"Original"`
+	palavraTraducao string `json:"Traducao"`
+	anterior        *Palavra `json:"Anterior"`
+	proxima         *Palavra `json:"Proxima"`
 }
+
+type PalavraJSON struct {
+    Original string `json:"Original"`
+    Traducao string `json:"Traducao"`
+}
+type ArrayPalavras []PalavraJSON
+
+var objPalavras = ArrayPalavras {}
 
 type ConjuntoPalavras struct {
 	tamanho int
@@ -40,7 +54,7 @@ func (palavras *ConjuntoPalavras) Show() {
 	contador := 0
 	var palavraInicial = palavras.inicio
 	for contador < palavras.tamanho {
-		fmt.Printf("Palavra %v: %v\n", contador, palavraInicial)
+        fmt.Printf("Palavra %v: %v\n", contador, palavraInicial)
 		palavraInicial = palavraInicial.proxima
 		contador++
 	}
@@ -74,6 +88,18 @@ func leArquivo(arquivo string) []string {
 	return frases
 }
 
+func allowCORS(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Methods", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "*")
+}
+
+func getPalavras(w http.ResponseWriter, r *http.Request) {
+    allowCORS(w)
+	json.NewEncoder(w).Encode(objPalavras)
+}
+
 func main() {
 
 	var qtd int8 = 0
@@ -96,21 +122,29 @@ func main() {
 	}
 	conjuntoP := &ConjuntoPalavras{}
 	var p1 string
-	var p2 string
+    var p2 string
 	i := 0
 	for range frases {
 		fmt.Println(frases[i])
 		if i%2 == 0 {
 			p1 = frases[i]
-			p2 = frases[i+1]
+            p2 = frases[i+1]
 			palavra := Palavra{
-				palavraOriginal: p1,
+                palavraOriginal: p1,
 				palavraTraducao: p2,
-			}
+            }
+            palavraJSON := PalavraJSON {
+                Original: p1,
+                Traducao: p2,
+            }
+            objPalavras = append(objPalavras, palavraJSON)
 			conjuntoP.Append(&palavra)
 		}
 		i++
 	}
-	conjuntoP.Show()
-
+    conjuntoP.Show()
+    
+    router := mux.NewRouter().StrictSlash(true)
+	router.HandleFunc("/palavras", getPalavras).Methods("GET")
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
