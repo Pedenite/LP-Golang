@@ -6,19 +6,56 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
-    <style>
-        .frase {
-            font-size: 40px;
+    
+    <style tyle="text/css">
+        .cartafrente {
+            background: #83ff83;
+            border-radius: 10px;
+            border: 2px dashed rgb(0, 0, 0);
+
+            height: 450px;
+            width: 250px; 
+            
+            margin: 5px;
+            margin-left: auto;
+            margin-right: auto;
+            
         }
 
-        .original {
-            background-color: aqua;
-        }
+        .cartaverso{
+            background: #ff9283;
+            border-radius: 10px;
+            border: 2px dashed rgb(0, 0, 0);
 
-        .traducao {
-            background-color: yellowgreen;
+            height: 450px;
+            width: 250px; 
+            
+            margin: 5px;
+            margin-left: auto;
+            margin-right: auto;
         }
     </style>
+        
+        <div class=carta><style>
+            .frase {
+                
+                font-size: 40px;
+                text-align: center;
+                margin-top: 204px;
+                
+            }
+    
+            .original {
+              }
+    
+            .traducao {
+                
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            
+        </style>.</div>
 </head>
 
 <body>
@@ -29,6 +66,7 @@
     </script>
     <script>
         let arrayPalavras;
+        
         $.ajax({
             type: 'GET',
             url : 'http://localhost:8080/palavras',
@@ -41,14 +79,23 @@
             }
         }).then(() => {
             arrayPalavras.forEach(element => {
+                
                 $(`
+                 <div class = "cartafrente">
                     <div class="frase">
                         <span class="original">${element.Original}</span>
+                    </div>
+                </div>
+               
+                <div class = "cartaverso">
+                    <div class="frase">
                         <span class="traducao">${element.Traducao}</span>
                     </div>
+                </div>
                 `).appendTo('body');
             });
         });
+        
 
     </script>
 </body>
