@@ -4,32 +4,31 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
-    "strings"
-    
-    "encoding/json"
+	"strings"
+
+	"encoding/json"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-const MAX = 10
-
 type Palavra struct {
-	palavraOriginal string `json:"Original"`
-	palavraTraducao string `json:"Traducao"`
+	palavraOriginal string   `json:"Original"`
+	palavraTraducao string   `json:"Traducao"`
 	anterior        *Palavra `json:"Anterior"`
 	proxima         *Palavra `json:"Proxima"`
 }
 
 type PalavraJSON struct {
-    Original string `json:"Original"`
-    Traducao string `json:"Traducao"`
+	Original string `json:"Original"`
+	Traducao string `json:"Traducao"`
 }
 type ArrayPalavras []PalavraJSON
 
-var objPalavras = ArrayPalavras {}
+var objPalavras = ArrayPalavras{}
 
 type ConjuntoPalavras struct {
 	tamanho int
@@ -54,7 +53,7 @@ func (palavras *ConjuntoPalavras) Show() {
 	contador := 0
 	var palavraInicial = palavras.inicio
 	for contador < palavras.tamanho {
-        fmt.Printf("Palavra %v: %v\n", contador, palavraInicial)
+		fmt.Printf("Palavra %v: %v\n", contador, palavraInicial)
 		palavraInicial = palavraInicial.proxima
 		contador++
 	}
@@ -71,8 +70,9 @@ func leArquivo(arquivo string) []string {
 	reader := bufio.NewReader(file)
 	for {
 		linha, err := reader.ReadString('-')
-		linha = strings.TrimSpace(linha) //Para eliminar espacos desnecessarios no inicio e fim de strings
-		noDashes := strings.Replace(linha, "-", "", -1)
+		linha = strings.TrimSpace(linha)                //Para eliminar espacos desnecessarios no inicio e fim de strings
+		noDashes := strings.Replace(linha, "-", "", -1) //Elimina o caractere '-'
+
 		frases = append(frases, noDashes)
 
 		linha, err = reader.ReadString('\n')
@@ -91,60 +91,71 @@ func leArquivo(arquivo string) []string {
 func allowCORS(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-    w.Header().Set("Access-Control-Allow-Methods", "*")
-    w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
 }
 
 func getPalavras(w http.ResponseWriter, r *http.Request) {
-    allowCORS(w)
+	allowCORS(w)
 	json.NewEncoder(w).Encode(objPalavras)
 }
 
 func main() {
 
-	var qtd int8 = 0
-	var userFile string
 	var frases []string
-	for qtd <= 0 || qtd > MAX {
-		fmt.Printf("Digite a quantidade de arquivos a serem lidos: ")
-		fmt.Scan(&qtd)
+
+	files, err := ioutil.ReadDir("files/") //Armazena todos os nomes de arquivos do diretório files no array de strings files
+	if err != nil {
+		log.Fatal(err)
 	}
-	for qtd > 0 {
-		fmt.Printf("Indique o nome do arquivo: ")
-		fmt.Scan(&userFile)
-		temp := leArquivo("files/" + userFile)
+
+	qtd := 1
+	fmt.Println("Foram encontrados os seguintes arquivos:")
+	for _, f := range files {
+		fmt.Printf("%d - ", qtd)
+		fmt.Println(f.Name())
+		qtd++
+	}
+
+	if qtd == 1 { //caso nenhum arquivo seja encontrado, sai com a msg de erro
+		panic("Nenhum arquivo encontrado")
+	}
+
+	for _, f := range files { //lê todos os arquivos do diretório files
+
+		temp := leArquivo("files/" + f.Name())
 		i := 0
 		for range temp {
 			frases = append(frases, temp[i])
 			i++
 		}
-		qtd--
+
 	}
 	conjuntoP := &ConjuntoPalavras{}
 	var p1 string
-    var p2 string
+	var p2 string
 	i := 0
 	for range frases {
-		fmt.Println(frases[i])
+		//fmt.Println(frases[i])
 		if i%2 == 0 {
 			p1 = frases[i]
-            p2 = frases[i+1]
+			p2 = frases[i+1]
 			palavra := Palavra{
-                palavraOriginal: p1,
+				palavraOriginal: p1,
 				palavraTraducao: p2,
-            }
-            palavraJSON := PalavraJSON {
-                Original: p1,
-                Traducao: p2,
-            }
-            objPalavras = append(objPalavras, palavraJSON)
+			}
+			palavraJSON := PalavraJSON{
+				Original: p1,
+				Traducao: p2,
+			}
+			objPalavras = append(objPalavras, palavraJSON)
 			conjuntoP.Append(&palavra)
 		}
 		i++
 	}
-    conjuntoP.Show()
-    
-    router := mux.NewRouter().StrictSlash(true)
+	conjuntoP.Show()
+
+	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/palavras", getPalavras).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
