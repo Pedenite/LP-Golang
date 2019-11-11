@@ -129,7 +129,7 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-large-translate" onclick="sumirFrente('${i}')">Tradução</button>
+                    <button class="btn btn-large-translate" onclick="traducao('${i}')">Tradução</button>
                     <button class="btn btn-large-next">Próximo</button>
                     <hr style="margin: 10px 0" />
                 </div>
@@ -141,7 +141,8 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-large">Próximo</button>
+                    <button class="btn btn-large-translate" onclick="original('${i}')">Original</button>
+                    <button class="btn btn-large-next">Próximo</button>
                     <hr style="margin: 10px 0" />
                 </div>  
                 `).appendTo('body');
@@ -150,9 +151,14 @@
             console.log(cont);
         });
         
-        function sumirFrente(id){
+        function traducao(id){
             sumir('frente'+id)
             aparecer('verso'+id)
+        }
+
+        function original(id){
+            aparecer('frente'+id)
+            sumir('verso'+id)
         }
 
         function sumir(id){
