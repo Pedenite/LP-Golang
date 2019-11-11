@@ -117,45 +117,49 @@
                 console.log(e);
             }
         }).then(() => {
-            let cont = 0, i = 0;
+            var cont = 0
+            let i = 0
             arrayPalavras.forEach(element => {cont++;});
             arrayPalavras.forEach(element => {
                 
                 $(`
-                <div id="frente${i}">
-                    <div class = "cartafrente">
-                        <div class="frase">
-                            <span class="original">${element.Original}</span>
+                <div class="sumir" id="palavraID${i}">
+                    <div id="frente${i}">
+                        <div class = "cartafrente">
+                            <div class="frase">
+                                <span class="original">${element.Original}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <button class="btn btn-large-translate" onclick="traducao('${i}')">Tradução</button>
-                    <button class="btn btn-large-next">Próximo</button>
-                    <hr style="margin: 10px 0" />
+                        <button class="btn btn-large-translate" onclick="traducao('${i}')">Tradução</button>
+                        <button class="btn btn-large-next" onclick="proximo('${i}')">Próximo</button>
+                    </div>
+                    
+                    <div id="verso${i}" class="sumir">
+                        <div class = "cartaverso">
+                            <div class="frase">
+                                <span class="traducao">${element.Traducao}</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-large-translate" onclick="original('${i}')">Original</button>
+                        <button class="btn btn-large-next" onclick="proximo('${i}')">Próximo</button>
+                    </div>  
                 </div>
-                
-                <div id="verso${i}" class="sumir">
-                    <div class = "cartaverso">
-                        <div class="frase">
-                            <span class="traducao">${element.Traducao}</span>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-large-translate" onclick="original('${i}')">Original</button>
-                    <button class="btn btn-large-next">Próximo</button>
-                    <hr style="margin: 10px 0" />
-                </div>  
                 `).appendTo('body');
                 i++
             });
-            console.log(cont);
+            document.getElementById(`palavraID${Math.floor(Math.random() * cont) }`).classList.remove("sumir")
         });
         
         function traducao(id){
             sumir('frente'+id)
             aparecer('verso'+id)
         }
-
+        function proximo(idAtual){
+            sumir('palavraID'+idAtual)
+            aparecer(`palavraID${Math.floor(Math.random()*arrayPalavras.length)}`)
+        }
         function original(id){
             aparecer('frente'+id)
             sumir('verso'+id)
