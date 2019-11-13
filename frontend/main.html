@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Projeto GO</title>        
+        <link rel="stylesheet" type="text/css" href="./css/main.css">
+    </head>
+
+<body>
+    
+    <header class="menu">
+        <div class="barra-nome">
+            <div = class="barra">  
+                <div class="itens">      
+                <ul> 
+                    <li>
+                        <a href="">Relembrar Palavras</a>
+                    </li>
+                    <li>
+                        <a href="">Novas palavras</a>
+                </ul>
+        </div>
+    </div>
+        <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+    </script>
+    <script>
+        let arrayPalavras;
+        
+        $.ajax({
+            type: 'GET',
+            url : 'http://localhost:8080/palavras',
+            dataType: 'json',
+            success: function(data) {
+                arrayPalavras = data
+            },
+            error: function(e){
+                console.log(e);
+            }
+        }).then(() => {
+            var cont = 0
+            let i = 0
+            arrayPalavras.forEach(element => {cont++;});
+            arrayPalavras.forEach(element => {
+                
+                $(`
+                
+                <div class="sumir" id="palavraID${i}">
+                    <div id="frente${i}">
+                        <button class="cartafrente frase btn-config" onclick="traducao('${i}')">${element.Original}</button>
+                    </div>
+                    <div id="verso${i}" class="sumir">
+                        <button class="cartaverso frase btn-config" onclick="original('${i}')">${element.Traducao}</button>   
+                    </div>
+                    <button class="btn btn-config" onclick="proximo('${i}')">Próximo</button>
+                </div>
+                `).appendTo('body');
+                i++
+            });
+            document.getElementById(`palavraID${Math.floor(Math.random() * cont) }`).classList.remove("sumir")
+        });
+        
+        function traducao(id){
+            sumir('frente'+id)
+            aparecer('verso'+id)
+        }
+        function proximo(idAtual){
+            sumir('palavraID'+idAtual)
+            aparecer(`palavraID${Math.floor(Math.random()*arrayPalavras.length)}`)
+        }
+        function original(id){
+            aparecer('frente'+id)
+            sumir('verso'+id)
+        }
+
+        function sumir(id){
+            document.getElementById(id).classList.add("sumir")
+        }
+        function aparecer(id){
+            document.getElementById(id).classList.remove("sumir")
+        }
+    </script>
+    </header>
+</body>
+</html>
