@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"strings"
-	"math/rand"
+	"text/template"
+	"time"
 
 	"encoding/json"
 	"log"
@@ -17,10 +19,10 @@ import (
 )
 
 type Palavra struct {
-	palavraOriginal string   
-	palavraTraducao string   
-	anterior        *Palavra 
-	proxima         *Palavra 
+	palavraOriginal string
+	palavraTraducao string
+	anterior        *Palavra
+	proxima         *Palavra
 }
 
 type ConjuntoPalavras struct {
@@ -57,7 +59,7 @@ func (palavras *ConjuntoPalavras) ShowAndUpdate() {
 	contador := 0
 	var palavraInicial = palavras.inicio
 	for contador < palavras.tamanho {
-		fmt.Printf("Palavra %v: %v\n", contador, palavraInicial)
+		//fmt.Printf("Palavra %v: %v\n", contador, palavraInicial)
 		palavraJSON := PalavraJSON{
 			Original: palavraInicial.palavraOriginal,
 			Traducao: palavraInicial.palavraTraducao,
@@ -114,6 +116,44 @@ func getPalavra(w http.ResponseWriter, r *http.Request) {
 	randomNumber := rand.Intn(conjuntoP.tamanho)
 	json.NewEncoder(w).Encode(objPalavras[randomNumber])
 }
+func index(w http.ResponseWriter, r *http.Request) {
+	tpl, _ := template.ParseFiles("frontend/index.html")
+
+	w.WriteHeader(http.StatusOK)
+	tpl.Execute(w, nil)
+}
+func pgMain(w http.ResponseWriter, r *http.Request) {
+	teste, err := r.Cookie("Email")
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
+	if teste.Value != "" {
+		tpl, _ := template.ParseFiles("frontend/main.html")
+		w.WriteHeader(http.StatusOK)
+		tpl.Execute(w, nil)
+	} else {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
+}
+
+func getFormulario(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	email := r.PostForm.Get("txtEmail")
+	fmt.Println("Email logado:", email)
+	lembrarDeMim := r.PostForm.Get("lembrar")
+	fmt.Println("lembrar De Mim?", lembrarDeMim)
+	expirar := time.Now()
+	if lembrarDeMim == "on" {
+		expirar = time.Now().Add(24 * 60 * 60 * time.Second) //Lembrar por uma dia
+	} else {
+		expirar = time.Now().Add(120 * time.Second) //Lembrar por 2 minutis
+	}
+	cookie := http.Cookie{Name: "Email", Value: email, Expires: expirar}
+	http.SetCookie(w, &cookie)
+
+	http.Redirect(w, r, "/main", http.StatusSeeOther)
+}
 
 func main() {
 
@@ -125,10 +165,10 @@ func main() {
 	}
 
 	qtd := 1
-	fmt.Println("Foram encontrados os seguintes arquivos:")
+	//fmt.Println("Foram encontrados os seguintes arquivos:")
 	for _, f := range files {
-		fmt.Printf("%d - ", qtd)
-		fmt.Println(f.Name())
+		fmt.Println("indice do arquivo:", qtd)
+		fmt.Println("Arquivo encontrado:", f.Name(), "\n")
 		qtd++
 	}
 
@@ -146,7 +186,7 @@ func main() {
 		}
 
 	}
-	
+
 	var p1 string
 	var p2 string
 	i := 0
@@ -168,5 +208,8 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/palavras", getPalavras).Methods("GET")
 	router.HandleFunc("/palavra", getPalavra).Methods("GET")
+	router.HandleFunc("/", index)
+	router.HandleFunc("/login", getFormulario)
+	router.HandleFunc("/main", pgMain)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
