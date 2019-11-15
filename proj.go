@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"math/rand"
 
 	"encoding/json"
 	"log"
@@ -16,10 +17,16 @@ import (
 )
 
 type Palavra struct {
-	palavraOriginal string   `json:"Original"`
-	palavraTraducao string   `json:"Traducao"`
-	anterior        *Palavra `json:"Anterior"`
-	proxima         *Palavra `json:"Proxima"`
+	palavraOriginal string   
+	palavraTraducao string   
+	anterior        *Palavra 
+	proxima         *Palavra 
+}
+
+type ConjuntoPalavras struct {
+	tamanho int
+	inicio  *Palavra
+	fim     *Palavra
 }
 
 type PalavraJSON struct {
@@ -30,11 +37,7 @@ type ArrayPalavras []PalavraJSON
 
 var objPalavras = ArrayPalavras{}
 
-type ConjuntoPalavras struct {
-	tamanho int
-	inicio  *Palavra
-	fim     *Palavra
-}
+var conjuntoP = &ConjuntoPalavras{}
 
 func (palavras *ConjuntoPalavras) Append(novaPalavra *Palavra) {
 	if palavras.tamanho == 0 {
@@ -49,11 +52,17 @@ func (palavras *ConjuntoPalavras) Append(novaPalavra *Palavra) {
 	palavras.tamanho++
 }
 
-func (palavras *ConjuntoPalavras) Show() {
+func (palavras *ConjuntoPalavras) ShowAndUpdate() {
+	objPalavras = ArrayPalavras{}
 	contador := 0
 	var palavraInicial = palavras.inicio
 	for contador < palavras.tamanho {
 		fmt.Printf("Palavra %v: %v\n", contador, palavraInicial)
+		palavraJSON := PalavraJSON{
+			Original: palavraInicial.palavraOriginal,
+			Traducao: palavraInicial.palavraTraducao,
+		}
+		objPalavras = append(objPalavras, palavraJSON)
 		palavraInicial = palavraInicial.proxima
 		contador++
 	}
@@ -100,6 +109,12 @@ func getPalavras(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(objPalavras)
 }
 
+func getPalavra(w http.ResponseWriter, r *http.Request) {
+	allowCORS(w)
+	randomNumber := rand.Intn(conjuntoP.tamanho)
+	json.NewEncoder(w).Encode(objPalavras[randomNumber])
+}
+
 func main() {
 
 	var frases []string
@@ -131,7 +146,7 @@ func main() {
 		}
 
 	}
-	conjuntoP := &ConjuntoPalavras{}
+	
 	var p1 string
 	var p2 string
 	i := 0
@@ -144,18 +159,14 @@ func main() {
 				palavraOriginal: p1,
 				palavraTraducao: p2,
 			}
-			palavraJSON := PalavraJSON{
-				Original: p1,
-				Traducao: p2,
-			}
-			objPalavras = append(objPalavras, palavraJSON)
 			conjuntoP.Append(&palavra)
 		}
 		i++
 	}
-	conjuntoP.Show()
+	conjuntoP.ShowAndUpdate()
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/palavras", getPalavras).Methods("GET")
+	router.HandleFunc("/palavra", getPalavra).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
