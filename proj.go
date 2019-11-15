@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"os"
 	"strings"
+	"sync"
 	"text/template"
 	"time"
 
@@ -17,6 +18,9 @@ import (
 
 	"github.com/gorilla/mux"
 )
+
+const dir = "files/"     //diretório padrão dos arquivos
+const dir1 = "filesAux/" //diretório auxiliar dos arquivos
 
 type Palavra struct {
 	palavraOriginal string
@@ -59,7 +63,7 @@ func (palavras *ConjuntoPalavras) ShowAndUpdate() {
 	contador := 0
 	var palavraInicial = palavras.inicio
 	for contador < palavras.tamanho {
-		//fmt.Printf("Palavra %v: %v\n", contador, palavraInicial)
+		fmt.Printf("Palavra %v: %v\n", contador, palavraInicial)
 		palavraJSON := PalavraJSON{
 			Original: palavraInicial.palavraOriginal,
 			Traducao: palavraInicial.palavraTraducao,
@@ -159,39 +163,57 @@ func main() {
 
 	var frases []string
 
-	files, err := ioutil.ReadDir("files/") //Armazena todos os nomes de arquivos do diretório files no array de strings files
+	files, err := ioutil.ReadDir(dir) //Armazena todos arquivos do diretório files no array files
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	qtd := 1
-	//fmt.Println("Foram encontrados os seguintes arquivos:")
-	for _, f := range files {
-		fmt.Println("indice do arquivo:", qtd)
-		fmt.Println("Arquivo encontrado:", f.Name(), "\n")
-		qtd++
+	filesAux, err := ioutil.ReadDir(dir1) //Armazena todos arquivos do diretório filesAux no array filesAux
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	if qtd == 1 { //caso nenhum arquivo seja encontrado, sai com a msg de erro
+	qtd := 0
+	for _, f := range files {
+		qtd++
+		fmt.Println("indice do arquivo:", qtd)
+		fmt.Println("Arquivo encontrado:", f.Name(), "\n")
+	}
+
+	for _, f := range filesAux {
+		qtd++
+		fmt.Println("indice do arquivo:", qtd)
+		fmt.Println("Arquivo encontrado:", f.Name(), "\n")
+	}
+
+	if qtd == 0 { //caso nenhum arquivo seja encontrado, sai com a msg de erro
 		panic("Nenhum arquivo encontrado")
 	}
 
-	for _, f := range files { //lê todos os arquivos do diretório files
-
-		temp := leArquivo("files/" + f.Name())
-		i := 0
-		for range temp {
-			frases = append(frases, temp[i])
-			i++
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func(frases *[]string, wg *sync.WaitGroup) {
+		defer wg.Done()
+		for _, f := range files {
+			temp := leArquivo(dir + f.Name())
+			*frases = append(*frases, temp...)
 		}
+	}(&frases, &wg)
 
-	}
+	go func(frases *[]string, wg *sync.WaitGroup) {
+		defer wg.Done()
+		for _, f := range filesAux {
+			temp := leArquivo(dir1 + f.Name())
+			*frases = append(*frases, temp...)
+		}
+	}(&frases, &wg)
+
+	wg.Wait()
 
 	var p1 string
 	var p2 string
 	i := 0
 	for range frases {
-		//fmt.Println(frases[i])
 		if i%2 == 0 {
 			p1 = frases[i]
 			p2 = frases[i+1]
@@ -206,10 +228,10 @@ func main() {
 	conjuntoP.ShowAndUpdate()
 
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/palavras", getPalavras).Methods("GET")
-	router.HandleFunc("/palavra", getPalavra).Methods("GET")
-	router.HandleFunc("/", index)
-	router.HandleFunc("/login", getFormulario)
-	router.HandleFunc("/main", pgMain)
+	go router.HandleFunc("/palavras", getPalavras).Methods("GET")
+	go router.HandleFunc("/palavra", getPalavra).Methods("GET")
+	go router.HandleFunc("/", index)
+	go router.HandleFunc("/login", getFormulario)
+	go router.HandleFunc("/main", pgMain)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

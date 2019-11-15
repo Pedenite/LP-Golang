@@ -39,4 +39,23 @@ func getFormulario(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(email)
 	http.Redirect(w, r, "/main", http.StatusSeeOther)
 }
+
+var wg sync.WaitGroup////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	canal := make(chan string)
+	for _, f := range files {
+		go func(frases *[]string, wg *sync.WaitGroup, canal chan string) {
+			wg.Add(len(files))
+			canal <- "."
+			defer wg.Done()
+			temp := leArquivo(dir + f.Name())
+			i := 0
+			for range temp {
+				*frases = append(*frases, temp[i])
+				i++
+			}
+			wg.Wait()
+		}(&frases, &wg, canal)
+	}
+	wg.Wait()
+	fmt.Println(<-canal)
 */
