@@ -7,14 +7,120 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Novas Palavras</title>
     <style>
-    
+        
+     .box {
+        width: 300px;
+        padding: 80px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background-color: rgb(71, 71, 71);
+        text-align: center;
+        color: white;
+        border: 2px solid #00BFFF;
+        border-radius: 30px;
+        font-size: 20px;
+    }
+    .box h1{
+        font-weight: 350px;
+        margin-bottom: 40px;
+        
+    }
+    .box input[type = "text"],.box input[type = "newWord"]{
+        border: 0;
+        background: none;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        border: 2px solid #00BFFF;
+        padding: 14px 10px;
+        outline: none;
+        border-radius: 24px;
+        transition: 24px;
+    }
+    .box input[type = "text"],.box input[type = "translate"]{
+        border: 0;
+        background: none;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        border: 2px solid #00BFFF;
+        padding: 14px 10px;
+        outline: none;
+        border-radius: 24px;
+        transition: 24px;
+    }
+    .box input[type = "submit"]{
+        border: 0;
+        background: none;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        color:#ffff; 
+        border: 2px solid #00BFFF;
+        padding: 14px 20px;
+        outline: none;
+        border-radius: 24px;
+        transition: 24px;
+        
+    }
+    .box input[type = "submit"]:hover{
+        background-color: rgb(151, 151, 151);
+        
+
+    }
+            .barra-nome{
+                background-color: rgb(32, 32, 32);
+                height: 60px;
+                padding: 1px;
+                font-size: 30px;
+                   
+            }
+            
+            main ul li{
+
+                display: inline-block;
+                    
+            }
+            .itens ul li{
+                display: inline-block;
+               
+            }
+            .itens ul li a{
+                text-decoration: none;
+                font-family: Arial, Helvetica, sans-serif;
+                color: rgb(255, 255, 255);
+                
+             }
+            .itens{
+                text-align: center;
+                margin-top: -15px;
+            }
+            body{
+                background-color: rgb(78, 78, 78);
+                margin: 0 auto;
+            }
     </style>
 </head>
 <body>
+    <header class="menu">
+        <div class="barra-nome">
+                <div = class="barra">  
+                    <div class="itens">      
+                    <ul> 
+                    <li>
+                            <a href="http://localhost:8080/main">Relembrar Palavras</a>
+                    </ul>
+            </div>
+        </div>
+    </header>
+    <form class="box" action="" method="post">
     <form id="inputPalavras" action="/sendWord" method="POST">
         Palavra Nova: <input type="text" name="newWord"><br>
         Tradução    : <input type="text" name="translate"><br><br>
         <input type="submit" value="Criar">
     </form>
+</form>
 </body>
 </html>
