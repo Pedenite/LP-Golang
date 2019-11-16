@@ -12,14 +12,14 @@
 </head>
 <body>
     <script>
-        function myFunction() {
-            document.getElementById("frm1").submit();
+        function sendWord() {
+            document.getElementById("inputPalavras").submit();
         }
     </script>
     <form id="inputPalavras" action="/NovasPalavras">
         Palavra Nova: <input type="text" name="newWord"><br>
         Tradução    : <input type="text" name="translate"><br><br>
-        <input type="button" onclick="myFunction()" value="Submit">
+        <input type="button" onclick="sendWord()" value="Submit">
     </form>
 </body>
 </html>
