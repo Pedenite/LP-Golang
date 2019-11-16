@@ -104,7 +104,7 @@ func leArquivo(arquivo string) []string {
 }
 
 func escrArquivo1(original string, translated string) {
-	f, err := os.Create("files/inglesUser")
+	f, err := os.OpenFile("files/inglesUser", os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -122,10 +122,6 @@ func escrArquivo1(original string, translated string) {
 
 	f.Sync()
 	w.Flush()
-}
-
-func escrArquivo2(arquivo string) {
-
 }
 
 func allowCORS(w http.ResponseWriter) {
@@ -191,14 +187,23 @@ func getFormulario(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/main", http.StatusSeeOther)
 }
 
-func getFrases(w http.ResponseWriter, r *http.Request) { ////////////////////////////////////////////////////////////////////////////////////////
+func getFrases(w http.ResponseWriter, r *http.Request) { //Adiciona novas palavras ao programa
 	r.ParseForm()
 
 	original := r.PostForm.Get("newWord")
 	fmt.Println("Nova palavra: ", original)
 	translated := r.PostForm.Get("translate")
 	fmt.Println("Tradução: ", translated)
+	escrArquivo1(original, translated)
 	http.Redirect(w, r, "/main", http.StatusSeeOther)
+
+	palavra := Palavra{
+		palavraOriginal: original,
+		palavraTraducao: translated,
+	}
+	conjuntoP.Append(&palavra)
+
+	conjuntoP.ShowAndUpdate()
 }
 
 func main() {
