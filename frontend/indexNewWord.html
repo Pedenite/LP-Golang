@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <!-- <link rel="stylesheet" type="text/css" href="./css/index.css">  -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Novas Palavras</title>
+    <style>
+    
+    </style>
+</head>
+<body>
+    <script>
+        function myFunction() {
+            document.getElementById("frm1").submit();
+        }
+    </script>
+    <form id="inputPalavras" action="/NovasPalavras">
+        Palavra Nova: <input type="text" name="newWord"><br>
+        Tradução    : <input type="text" name="translate"><br><br>
+        <input type="button" onclick="myFunction()" value="Submit">
+    </form>
+</body>
+</html>
