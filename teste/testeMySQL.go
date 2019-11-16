@@ -9,7 +9,7 @@ import (
 
 func main() {
 	dbUsuario := "root"
-	dbSenha := "32330203"
+	dbSenha := "senha"
 	dbBanco := "LP"
 	db, err := sql.Open("mysql", dbUsuario+":"+dbSenha+"@/"+dbBanco)
 	if err != nil {
