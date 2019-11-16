@@ -10,14 +10,14 @@ import (
 func main() {
 	dbUsuario := "root"
 	dbSenha := "senha"
-	dbTabela := "login"
-	db, err := sql.Open("mysql", dbUsuario+":"+dbSenha+"@/"+dbTabela)
+	dbBanco := "LP"
+	db, err := sql.Open("mysql", dbUsuario+":"+dbSenha+"@/"+dbBanco)
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close()
 	var a string
-	usuario := db.QueryRow("SELECT * FROM palavras WHERE id = 1")
+	usuario := db.QueryRow("SELECT original FROM palavras WHERE id = 1")
 	usuario.Scan(&a)
 	fmt.Println(a)
 

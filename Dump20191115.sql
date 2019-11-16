@@ -29,6 +29,7 @@ CREATE TABLE `palavras` (
   `original` varchar(45) NOT NULL,
   `tradução` varchar(45) NOT NULL,
   `emailCriacao` varchar(45) NOT NULL,
+  `peso` int(2) NOT NULL,
   `data` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
