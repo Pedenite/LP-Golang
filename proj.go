@@ -195,7 +195,7 @@ func getFrases(w http.ResponseWriter, r *http.Request) { //Adiciona novas palavr
 	translated := r.PostForm.Get("translate")
 	fmt.Println("Tradução: ", translated)
 	escrArquivo1(original, translated)
-	http.Redirect(w, r, "/main", http.StatusSeeOther)
+	http.Redirect(w, r, "/NovasPalavras", http.StatusSeeOther)
 
 	palavra := Palavra{
 		palavraOriginal: original,
