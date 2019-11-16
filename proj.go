@@ -159,6 +159,13 @@ func pgMain(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func novasPalavras(w http.ResponseWriter, r *http.Request) {
+	tpl, _ := template.ParseFiles("frontend/indexNewWord.html")
+
+	w.WriteHeader(http.StatusOK)
+	tpl.Execute(w, nil)
+}
+
 func getFormulario(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
@@ -263,5 +270,6 @@ func main() {
 	go router.HandleFunc("/", index)
 	go router.HandleFunc("/login", getFormulario)
 	go router.HandleFunc("/main", pgMain)
+	go router.HandleFunc("/NovasPalavras", novasPalavras)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

@@ -1373,5 +1373,19 @@
         }
     },
     "theme": "vs-dark",
-    "themeBackground": "#1e1e1e"
+    "themeBackground": "#1e1e1e",
+    "windowsState": {
+        "lastActiveWindow": {
+            "folder": "file:///home/nosdyek/Downloads/go/src/GOPATH/src/github/nosdyek/rest-api/LP-Golang",
+            "backupPath": "/home/nosdyek/Downloads/go/src/GOPATH/src/github/nosdyek/rest-api/LP-Golang/~/.config/Code/Backups/13c36de1bdca0444ed891aa69c77b444",
+            "uiState": {
+                "mode": 0,
+                "x": 168,
+                "y": 26,
+                "width": 1024,
+                "height": 742
+            }
+        },
+        "openedWindows": []
+    }
 }
