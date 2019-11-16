@@ -104,18 +104,24 @@ func leArquivo(arquivo string) []string {
 }
 
 func escrArquivo1(original string, translated string) {
-	f, err := os.Open("files/inglesUser")
+	f, err := os.Create("files/inglesUser")
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
 
-	a, err := f.WriteString(original)
+	w := bufio.NewWriter(f)
+	a, err := w.WriteString(original)
 	fmt.Println(a)
-	b, err := f.WriteString(" - ")
+	b, err := w.WriteString(" - ")
 	fmt.Println(b)
-	c, err := f.WriteString(translated)
+	c, err := w.WriteString(translated)
 	fmt.Println(c)
+	d, err := w.WriteString("\n")
+	fmt.Println(d)
+
+	f.Sync()
+	w.Flush()
 }
 
 func escrArquivo2(arquivo string) {
@@ -207,8 +213,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	//escrArquivo1("ass", "cu")
 
 	qtd := 0
 	for _, f := range files {
