@@ -198,6 +198,7 @@ func getFrases(w http.ResponseWriter, r *http.Request) { ///////////////////////
 	fmt.Println("Nova palavra: ", original)
 	translated := r.PostForm.Get("translate")
 	fmt.Println("Tradução: ", translated)
+	http.Redirect(w, r, "/main", http.StatusSeeOther)
 }
 
 func main() {
@@ -274,6 +275,7 @@ func main() {
 	go router.HandleFunc("/", index)
 	go router.HandleFunc("/login", getFormulario)
 	go router.HandleFunc("/main", pgMain)
+	go router.HandleFunc("/sendWord", getFrases)
 	go router.HandleFunc("/NovasPalavras", novasPalavras)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

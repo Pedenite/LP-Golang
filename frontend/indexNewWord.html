@@ -11,15 +11,10 @@
     </style>
 </head>
 <body>
-    <script>
-        function sendWord() {
-            document.getElementById("inputPalavras").submit();
-        }
-    </script>
-    <form id="inputPalavras" action="/NovasPalavras">
+    <form id="inputPalavras" action="/sendWord" method="POST">
         Palavra Nova: <input type="text" name="newWord"><br>
         Tradução    : <input type="text" name="translate"><br><br>
-        <input type="button" onclick="sendWord()" value="Submit">
+        <input type="submit" value="Criar">
     </form>
 </body>
 </html>
