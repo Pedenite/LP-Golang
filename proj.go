@@ -185,7 +185,7 @@ func getFormulario(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/main", http.StatusSeeOther)
 }
 
-func getFrases(w http.ResponseWriter, r *http.Request) {
+func getFrases(w http.ResponseWriter, r *http.Request) { ////////////////////////////////////////////////////////////////////////////////////////
 	r.ParseForm()
 
 	original := r.PostForm.Get("newWord")
