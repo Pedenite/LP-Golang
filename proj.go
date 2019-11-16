@@ -103,6 +103,25 @@ func leArquivo(arquivo string) []string {
 	return frases
 }
 
+func escrArquivo1(original string, translated string) {
+	f, err := os.Open("files/inglesUser")
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	a, err := f.WriteString(original)
+	fmt.Println(a)
+	b, err := f.WriteString(" - ")
+	fmt.Println(b)
+	c, err := f.WriteString(translated)
+	fmt.Println(c)
+}
+
+func escrArquivo2(arquivo string) {
+
+}
+
 func allowCORS(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -159,6 +178,15 @@ func getFormulario(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/main", http.StatusSeeOther)
 }
 
+func getFrases(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	original := r.PostForm.Get("newWord")
+	fmt.Println("Nova palavra: ", original)
+	translated := r.PostForm.Get("translate")
+	fmt.Println("Tradução: ", translated)
+}
+
 func main() {
 
 	var frases []string
@@ -172,6 +200,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	//escrArquivo1("ass", "cu")
 
 	qtd := 0
 	for _, f := range files {
