@@ -18,21 +18,21 @@ USE `LP`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `new_table`
+-- Table structure for table `palavras`
 --
 
 DROP TABLE IF EXISTS `palavras`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `palavras` (
-  `id` int(8) NOT NULL,
+  `id` int(5) NOT NULL AUTO_INCREMENT,
   `original` varchar(45) NOT NULL,
   `tradução` varchar(45) NOT NULL,
   `emailCriacao` varchar(45) NOT NULL,
-  `peso` int(2) NOT NULL,
-  `data` datetime(6) NOT NULL,
+  `peso` int(2) NOT NULL DEFAULT '10',
+  `data` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -44,4 +44,4 @@ CREATE TABLE `palavras` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-15 19:27:57
+-- Dump completed on 2019-11-17 12:28:51
