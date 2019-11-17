@@ -1,0 +1,218 @@
+:root {
+    --primary-bg-color: #ffffff;
+    --secondary-bg-color: #083975;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+}
+
+html {
+    font-size: 62,5%;
+}
+
+.pop-up {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(7, 7, 7, .8);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pop-up__content {
+    padding: 4rem 10rem;
+    box-shadow: rgba(0, 0, 0, .5) 0 1.5rem 4rem;
+    background: linear-gradient(
+        -60deg,
+        rgba(239, 239, 255, .2) 60%,
+        rgba(95, 89, 90, 0.479) 60%
+    );
+}
+
+.user-div {
+    width: 40rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#user-label {
+    font-weight: 400;
+    pointer-events: none;
+    transition: all .5s;
+    color: #eee;
+    position: absolute;
+    z-index: 1000;
+    font-size: 2rem;
+    top: .5rem;
+    left: 1rem;
+}
+
+#user-input {
+    color: #000;
+    transition: all .2s;
+    font-weight: 400;
+    width: 100%;
+    font-size: 2rem;
+    padding: .2rem 1rem;
+    border-radius: 50px;
+    background-color: rgb(158, 156, 156);
+    border: 3px solid rgb(196, 196, 196);
+}
+
+#user-input:focus {
+    outline: none;
+    border: 3px solid #eee;
+}
+
+#auth-btn {
+    font-size: 1.6rem;
+    margin-top: 2rem;
+    border: none;
+    background-color: rgb(209, 209, 212);
+    box-shadow: rgba(0, 0, 0, .2) 0 1.5rem 4rem;
+    border-radius: 3px;
+    padding: .5rem 2rem;
+}
+
+#auth-btn:focus {
+    outline: none;
+}
+
+#auth-btn:hover {
+    cursor: pointer;
+}
+
+.main {
+    display: grid;
+    height: 100vh;
+    width: 100%;
+    grid-template-columns: 1fr 5fr;
+}
+
+.main__sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background: var(--secondary-bg-color);
+}
+
+.main__sidebar > div {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.main__sidebar > * {
+    opacity: 0;
+}
+
+.main__content {
+    background: radial-gradient(var(--primary-bg-color), rgb(168, 168, 231));
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.main__content > * {
+    opacity: 0;
+}
+
+#btn-verTraducao {
+    margin-right: 3rem;
+    font-size: 1.6rem;
+    border: none;
+    padding: 0 .2rem 0 .2rem;
+    background: none;
+    transition: all .3s;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: block;
+    color: #1956a5;
+}
+
+#btn-verTraducao:hover {
+    cursor: pointer;
+    transform: scale(1.05) skew(-5deg) translateY(-2px);
+    text-shadow: rgba(0, 0, 0, .2) 0 1rem 2rem;
+}
+
+#btn-verTraducao:focus {
+    outline: none;
+}
+
+.btn {
+    border: 1px solid rgb(201, 200, 200);
+    border-radius: 3px;
+    font-size: 1.6rem;
+    padding: .5rem 2rem;
+    box-shadow: rgba(0, 0, 0, .1) 0 .2rem 1rem;
+}
+
+.btn:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+.btn:hover {
+    cursor: pointer;
+}
+
+
+.card-holder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card {
+    perspective: 150rem;
+    -moz-perspective: 150rem;
+    text-align: center;
+    position: relative;
+    width: 20rem;
+    height: 30rem;
+    margin-bottom: 2rem;
+}
+
+.card__side {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    height: 30rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: all 1s ease-in-out;
+    overflow: hidden;
+    backface-visibility: hidden;
+    border-radius: 3px;
+    box-shadow: rgba(0, 0, 0, .2) 0 1.5rem 4rem;
+}
+
+.card--front {
+    background-color: rgb(14, 152, 156);
+}
+
+.card--back {
+    background-color: rgb(15, 228, 61);
+    transform: rotateY(180deg);
+}

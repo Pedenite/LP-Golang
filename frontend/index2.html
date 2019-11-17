@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="./public/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="pop-up">
+        <div class="pop-up__content">
+            <div class="user-div">
+                <label id="user-label" for="email">E-mail</label>
+                <input id="user-input" type="email" name="email">
+                <button id="auth-btn">Autenticar</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="main">
+        <div class="main__sidebar">
+            <div class="palavras--qnt">
+                <span>Total</span>
+                <span class="total-value">0</span>
+            </div>
+            <div class="palavras--aprendidas">
+                <span>Aprendidas</span>
+                <span class="aprendidas-value">0</span>
+            </div>
+            <div class="palavras--aprendendo">
+                <span>Em andamento</span>
+                <span class="andamento-value">0</span>
+            </div>
+        </div>
+
+        <div class="main__content">
+            <button id="btn-verTraducao">Ver Tradução</button>
+            <div class="card-holder">
+                <div class="card">
+                    <div class="card__side card--front" id="card-front">
+                        some random text
+                    </div>
+                    <div class="card__side card--back" id="card-back">
+                        some translate text
+                    </div>
+                </div>
+                <div class="btn-holder">
+                    <button id="btn-facil" class="btn" onclick="getRandomPalavras(-2)">Fácil</button>
+                    <button id="btn-medio" class="btn" onclick="getRandomPalavras(1)">Médio</button>
+                    <button id="btn-dificil" class="btn" onclick="getRandomPalavras(2)">Difícil</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+    </script>
+    <script src="public/js/animations.js"></script>
+    <script src="public/js/async-request.js"></script>
+    <script src="public/js/card-animation.js"></script>
+</body>
+</html>
