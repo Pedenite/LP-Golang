@@ -19,10 +19,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
+import ("strconv")
+
 const dir = "files/"     //diretório padrão dos arquivos
 const dir1 = "filesAux/" //diretório auxiliar dos arquivos
 
 type Palavra struct {
+	peso	    	int
 	palavraOriginal string
 	palavraTraducao string
 	anterior        *Palavra
@@ -56,6 +59,20 @@ func (palavras *ConjuntoPalavras) Append(novaPalavra *Palavra) {
 		palavras.fim = novaPalavra
 	}
 	palavras.tamanho++
+}
+
+func (palavras *ConjuntoPalavras) Remove(palavra *Palavra) {
+	var palavraAnterior *Palavra
+	palavraAtual := conjuntoP.inicio
+
+	for palavraAtual != palavra {
+		palavraAnterior = palavraAtual
+		palavraAtual = palavraAtual.proxima
+	}
+	palavraAnterior.proxima = palavraAtual.proxima
+
+	conjuntoP.tamanho--
+	conjuntoP.ShowAndUpdate();
 }
 
 func (palavras *ConjuntoPalavras) ShowAndUpdate() {
@@ -141,12 +158,42 @@ func getPalavra(w http.ResponseWriter, r *http.Request) {
 	randomNumber := rand.Intn(conjuntoP.tamanho)
 	json.NewEncoder(w).Encode(objPalavras[randomNumber])
 }
+
+func postAlterarPeso(w http.ResponseWriter, r *http.Request) {
+	allowCORS(w)
+	if conjuntoP.tamanho == 1 {
+		json.NewEncoder(w).Encode("processo finalizado");
+	} else {
+		palavra := r.FormValue("palavra")
+		pesoString := r.FormValue("peso")
+		peso, err := strconv.Atoi(pesoString)
+
+		if err != nil {
+			fmt.Println("parser error")	
+			} 
+			contador := 0
+			var palavraInicial = conjuntoP.inicio
+			for contador < conjuntoP.tamanho {
+				if palavraInicial.palavraOriginal == palavra {
+				palavraInicial.peso += peso
+				if palavraInicial.peso <= 0 {
+					conjuntoP.Remove(palavraInicial)
+				}
+				fmt.Println(palavraInicial)
+			}
+			palavraInicial = palavraInicial.proxima
+			contador++
+		}
+	}
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 	tpl, _ := template.ParseFiles("frontend/index.html")
 
 	w.WriteHeader(http.StatusOK)
 	tpl.Execute(w, nil)
 }
+
 func pgMain(w http.ResponseWriter, r *http.Request) {
 	teste, err := r.Cookie("Email")
 	if err != nil {
@@ -166,6 +213,11 @@ func novasPalavras(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	tpl.Execute(w, nil)
+}
+
+func getTamanhoLista(w http.ResponseWriter, r *http.Request) {
+	allowCORS(w)
+	json.NewEncoder(w).Encode(conjuntoP.tamanho)
 }
 
 func getFormulario(w http.ResponseWriter, r *http.Request) {
@@ -195,7 +247,7 @@ func getFrases(w http.ResponseWriter, r *http.Request) { //Adiciona novas palavr
 	translated := r.PostForm.Get("translate")
 	fmt.Println("Tradução: ", translated)
 	escrArquivo1(original, translated)
-	http.Redirect(w, r, "/NovasPalavras", http.StatusSeeOther)
+	http.Redirect(w, r, "/main", http.StatusSeeOther)
 
 	palavra := Palavra{
 		palavraOriginal: original,
@@ -207,7 +259,6 @@ func getFrases(w http.ResponseWriter, r *http.Request) { //Adiciona novas palavr
 }
 
 func main() {
-
 	var frases []string
 
 	files, err := ioutil.ReadDir(dir) //Armazena todos arquivos do diretório files no array files
@@ -265,6 +316,7 @@ func main() {
 			p1 = frases[i]
 			p2 = frases[i+1]
 			palavra := Palavra{
+				peso: 3,
 				palavraOriginal: p1,
 				palavraTraducao: p2,
 			}
@@ -277,6 +329,8 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	go router.HandleFunc("/palavras", getPalavras).Methods("GET")
 	go router.HandleFunc("/palavra", getPalavra).Methods("GET")
+	go router.HandleFunc("/tamanho-lista", getTamanhoLista).Methods("GET")
+	go router.HandleFunc("/alterar-peso", postAlterarPeso).Methods("POST")
 	go router.HandleFunc("/", index)
 	go router.HandleFunc("/login", getFormulario)
 	go router.HandleFunc("/main", pgMain)
