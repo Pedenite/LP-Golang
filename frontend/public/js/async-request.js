@@ -1,4 +1,5 @@
 let palavra;
+let tamanhoLista;
 
 getRandomPalavras();
 
@@ -22,18 +23,8 @@ function getRandomPalavras(peso) {
             } 
         });
     }
-    
-    $.ajax({
-        type: 'GET',
-        url : 'http://localhost:8080/tamanho-lista',
-        dataType: 'json',
-        success: function(data) {
-            $('.total-value').text(data);
-        },
-        error: function(e){
-            console.log(e);
-        }
-    })
+
+    getTamanhoLista();
 
     $.ajax({
         type: 'GET',
@@ -57,5 +48,44 @@ function getRandomPalavras(peso) {
             cardFront.text(palavra.Original);
             cardBack.text(palavra.Traducao);
         }
-    })
+    });
+}
+
+
+function getTamanhoLista() {
+    $.ajax({
+        type: 'GET',
+        url : 'http://localhost:8080/tamanho-lista',
+        dataType: 'json',
+        success: function(data) {
+            if (!tamanhoLista) {
+                tamanhoLista = data;
+            } else if (data > tamanhoLista) {
+                tamanhoLista = data;
+            }
+
+            $('.total-value').text(tamanhoLista);
+            $('.aprendidas-value').text(tamanhoLista - data);
+            $('.andamento-value').text(data);
+        },
+        error: function(e){
+            console.log(e);
+        }
+    });
+}
+
+function addFrase(original, traducao) {
+    $.ajax({
+        url: 'http://localhost:8080/nova-frase',
+        type: 'post',
+        dataType: 'html',
+        data : { 
+            original, traducao
+        },
+        success : function(data) {
+        },
+        error: function(e){
+            console.log(e);
+        } 
+    });
 }

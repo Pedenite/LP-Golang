@@ -159,6 +159,21 @@ func getPalavra(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(objPalavras[randomNumber])
 }
 
+func postNovaFrase(w http.ResponseWriter, r *http.Request) {
+	allowCORS(w)
+	original := r.FormValue("original")
+	traducao := r.FormValue("traducao")
+	escrArquivo1(original, traducao)
+
+	palavra := Palavra{
+		palavraOriginal: original,
+		palavraTraducao: traducao,
+	}
+	conjuntoP.ShowAndUpdate()
+	conjuntoP.Append(&palavra)
+	json.NewEncoder(w).Encode("frase adicionada");
+}
+
 func postAlterarPeso(w http.ResponseWriter, r *http.Request) {
 	allowCORS(w)
 	if conjuntoP.tamanho == 1 {
@@ -170,11 +185,12 @@ func postAlterarPeso(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			fmt.Println("parser error")	
-			} 
-			contador := 0
-			var palavraInicial = conjuntoP.inicio
-			for contador < conjuntoP.tamanho {
-				if palavraInicial.palavraOriginal == palavra {
+		}
+
+		contador := 0
+		var palavraInicial = conjuntoP.inicio
+		for contador < conjuntoP.tamanho {
+			if palavraInicial.palavraOriginal == palavra {
 				palavraInicial.peso += peso
 				if palavraInicial.peso <= 0 {
 					conjuntoP.Remove(palavraInicial)
@@ -331,6 +347,7 @@ func main() {
 	go router.HandleFunc("/palavra", getPalavra).Methods("GET")
 	go router.HandleFunc("/tamanho-lista", getTamanhoLista).Methods("GET")
 	go router.HandleFunc("/alterar-peso", postAlterarPeso).Methods("POST")
+	go router.HandleFunc("/nova-frase", postNovaFrase).Methods("POST")
 	go router.HandleFunc("/", index)
 	go router.HandleFunc("/login", getFormulario)
 	go router.HandleFunc("/main", pgMain)
