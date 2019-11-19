@@ -11,18 +11,18 @@ function getRandomPalavras(peso) {
             url: 'http://localhost:8080/alterar-peso',
             type: 'post',
             dataType: 'html',
-            data : { 
+            data: {
                 peso: peso,
                 palavra: palavra.Original
             },
-            success : function(data) {
+            success: function (data) {
                 if (data) {
                     alert('Deck finalizado');
                 }
             },
-            error: function(e){
+            error: function (e) {
                 console.log(e);
-            } 
+            }
         });
     }
 
@@ -30,53 +30,55 @@ function getRandomPalavras(peso) {
 
     $.ajax({
         type: 'GET',
-        url : 'http://localhost:8080/palavra',
+        url: 'http://localhost:8080/palavra',
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             palavra = data
         },
-        error: function(e){
+        error: function (e) {
         }
     })
-    .then(() => {
-        if (cardPosition == 1) {
-            // secondRotateCard is a card-animation.js function
-            secondRotateCard();
-            cardFront.text(palavra.Original);
-            setTimeout(function() {
+        .then(() => {
+            if (cardPosition == 1) {
+                // secondRotateCard is a card-animation.js function
+                secondRotateCard();
+                cardFront.text(palavra.Original);
+                setTimeout(function () {
+                    cardBack.text(palavra.Traducao);
+                }, 1000);
+            } else {
+                cardFront.text(palavra.Original);
                 cardBack.text(palavra.Traducao);
-            }, 1000);
-        } else {
-            cardFront.text(palavra.Original);
-            cardBack.text(palavra.Traducao);
-        }
-    });
+            }
+        });
 }
 
 
 function getTamanhoLista() {
     $.ajax({
         type: 'GET',
-        url : 'http://localhost:8080/tamanho-lista',
+        url: 'http://localhost:8080/tamanho-lista',
         dataType: 'json',
-        success: function(data) {
-            if ((tamanhoLista-data) > aprendidas) {
+        success: function (data) {
+            if ((tamanhoLista - data) > aprendidas) {
                 aprendidas = tamanhoLista - data;
             }
             if (!tamanhoLista || data > tamanhoLista) {
                 tamanhoLista = data;
             }
-            if((aprendidas + data) > tamanhoLista) {
+            if ((aprendidas + data) > tamanhoLista) {
                 tamanhoLista = aprendidas + data
             }
+
             qntLoader('totalQnt', tamanhoLista, 'Total');
-            qntLoader('aprendidasQnt', aprendidas, 'Aprendidas');
-            
+            qntLoader('aprendidasQnt', ((aprendidas*100)/tamanhoLista), 'Aprendidas',"#01781f", "#01781f", "#00ff40");
+            qntLoader('emAndamentoQnt', 100 - ((aprendidas*100)/tamanhoLista), 'Em Andamento');
+
             $('.total-value').text(tamanhoLista);
             $('.aprendidas-value').text(aprendidas);
             $('.andamento-value').text(data);
         },
-        error: function(e){
+        error: function (e) {
             console.log(e);
         }
     });
@@ -87,13 +89,28 @@ function addFrase(original, traducao) {
         url: 'http://localhost:8080/nova-frase',
         type: 'post',
         dataType: 'html',
-        data : { 
+        data: {
             original, traducao
         },
-        success : function(data) {
+        success: function (data) {
         },
-        error: function(e){
+        error: function (e) {
             console.log(e);
-        } 
+        }
+    });
+}
+function qntLoader(idContainer, progress, title, colorNum, colorProgress, colorBarrier) {
+    $(`#${idContainer}`).circularloader({
+        backgroundColor: "#083975",//background colour of inner circle
+        fontColor: colorNum,//font color of progress text
+        fontSize: "25px",//font size of progress text
+        radius: 45,//radius of circle
+        progressBarBackground: colorBarrier ,//background colour of circular progress Bar
+        progressBarColor: colorProgress,//colour of circular progress bar
+        progressBarWidth: 15,//progress bar width
+        progressPercent: progress,//progress percentage out of 100
+        progressValue: progress,//diplay this value instead of percentage
+        showText: true,//show progress text or not
+        title: title,//show header title for the progress bar
     });
 }

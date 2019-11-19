@@ -23,13 +23,10 @@
     <main class="main">
         <div class="main__sidebar">
             <div class="palavras--qnt" id = "totalQnt">
-                <span class="total-value">0</span>
             </div>
             <div class="palavras--aprendidas" id = "aprendidasQnt">
-                <span class="aprendidas-value">0</span>
             </div>
             <div class="palavras--aprendendo" id = "emAndamentoQnt">
-                <span class="andamento-value">0</span>
             </div>
         </div>
 
@@ -63,29 +60,10 @@
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous">
     </script>
+    <script src="public/js/CircularLoader-v1.3.js"></script>
     <script src="public/js/animations.js"></script>
     <script src="public/js/async-request.js"></script>
     <script src="public/js/card-animation.js"></script>
     <script src="public/js/addFrase.js"></script>
-    <script src="public/js/jquery-1.10.2.js"></script>
-    <script src="public/js/CircularLoader-v1.3.js"></script>
-    
-    <script>
-        function qntLoader(idContainer, progress, title) {
-            $(`#${idContainer}`).circularloader({
-                backgroundColor: "#fff",//background colour of inner circle
-                fontColor: "#000000",//font color of progress text
-                fontSize: "40px",//font size of progress text
-                radius: 45,//radius of circle
-                progressBarBackground: "#eee",//background colour of circular progress Bar
-                progressBarColor: "#0707",//colour of circular progress bar
-                progressBarWidth: 15,//progress bar width
-                progressPercent: progress ,//progress percentage out of 100
-                progressValue:  progress,//diplay this value instead of percentage
-                showText: true,//show progress text or not
-                title: title,//show header title for the progress bar
-            });
-        }
-    </script>
 </body>
 </html>
