@@ -70,9 +70,9 @@ function getTamanhoLista() {
                 tamanhoLista = aprendidas + data
             }
 
-            qntLoader('totalQnt', tamanhoLista, 'Total');
-            qntLoader('aprendidasQnt', ((aprendidas*100)/tamanhoLista), 'Aprendidas',"#01781f", "#01781f", "#00ff40");
-            qntLoader('emAndamentoQnt', 100 - ((aprendidas*100)/tamanhoLista), 'Em Andamento');
+            qntLoader('totalQnt', tamanhoLista, 'Total', "#ffffff", "#083975", "#083975");
+            qntLoader('aprendidasQnt', ((aprendidas*100)/tamanhoLista), 'Aprendidas',"#ffffff", "#00f7ff", "#ffffff");
+            qntLoader('emAndamentoQnt', 100 - ((aprendidas*100)/tamanhoLista), 'Andamento',"#a6ffce","#00ff72","#a6ffce");
 
             $('.total-value').text(tamanhoLista);
             $('.aprendidas-value').text(aprendidas);
@@ -104,7 +104,7 @@ function qntLoader(idContainer, progress, title, colorNum, colorProgress, colorB
         backgroundColor: "#083975",//background colour of inner circle
         fontColor: colorNum,//font color of progress text
         fontSize: "25px",//font size of progress text
-        radius: 45,//radius of circle
+        radius: 35,//radius of circle
         progressBarBackground: colorBarrier ,//background colour of circular progress Bar
         progressBarColor: colorProgress,//colour of circular progress bar
         progressBarWidth: 15,//progress bar width
