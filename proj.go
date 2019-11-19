@@ -68,9 +68,9 @@ func sendEmail(userEmail string) {
 	}
 
 	from := mail.NewEmail("Me", "kesley.kenny.kk@gmail.com")
-	subject := "Congratulations, seu porra"
+	subject := "Parabéns por se dedicar aos estudos!"
 	to := mail.NewEmail("Me", userEmail)
-	plainTextContent := "dava pra fzr milior"
+	plainTextContent := "Congrats! ;)"
 	htmlContent := "<h1> Palavras aprendidas recentemente:<h1><br><h4>" + strings.Join(frases, "</h4><h4>")
 	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 	client := sendgrid.NewSendClient("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")
