@@ -1,5 +1,7 @@
 let palavra;
 let tamanhoLista;
+let aprendidas = 0;
+let emAndamento = 0;
 
 getRandomPalavras();
 
@@ -58,14 +60,19 @@ function getTamanhoLista() {
         url : 'http://localhost:8080/tamanho-lista',
         dataType: 'json',
         success: function(data) {
-            if (!tamanhoLista) {
+            console.log(data)
+            if ((tamanhoLista-data) > aprendidas) {
+                aprendidas = tamanhoLista - data;
+            }
+            if (!tamanhoLista || data > tamanhoLista) {
                 tamanhoLista = data;
-            } else if (data > tamanhoLista) {
-                tamanhoLista = data;
+            }
+            if((aprendidas + data) > tamanhoLista) {
+                tamanhoLista = aprendidas + data
             }
 
             $('.total-value').text(tamanhoLista);
-            $('.aprendidas-value').text(tamanhoLista - data);
+            $('.aprendidas-value').text(aprendidas);
             $('.andamento-value').text(data);
         },
         error: function(e){

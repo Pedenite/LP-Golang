@@ -169,8 +169,8 @@ func postNovaFrase(w http.ResponseWriter, r *http.Request) {
 		palavraOriginal: original,
 		palavraTraducao: traducao,
 	}
-	conjuntoP.ShowAndUpdate()
 	conjuntoP.Append(&palavra)
+	conjuntoP.ShowAndUpdate()
 	json.NewEncoder(w).Encode("frase adicionada");
 }
 
