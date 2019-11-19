@@ -4,13 +4,15 @@ const popUp = $('.pop-up');
 const userInput = $('#user-input');
 const userLabel = $('#user-label');
 
-authBtn.on('click', () => {
-    popUp.fadeTo("slow", 0, (done) => {
-        popUp.css('display', 'none');
+if (!localStorage.getItem('email')) {
+    popUp.css('display', 'flex');
+} else {
+    showAllElements();
+}
 
-        $('.main__content > *').fadeTo("fast", 1);
-        $('.main__sidebar > *').fadeTo("fast", 1);
-    });
+authBtn.on('click', () => {
+    localStorage.setItem("email", userInput.val());
+    fadePopUp();
 });
 
 userInput.on('focus', () => {
@@ -20,3 +22,15 @@ userInput.on('focus', () => {
         'font-size': '1.4rem'
     })
 });
+
+function fadePopUp() {
+    popUp.fadeTo("slow", 0, (done) => {
+        popUp.css('display', 'none');
+        showAllElements();
+    });
+}
+
+function showAllElements() {
+    $('.main__content > *').fadeTo("fast", 1);
+    $('.main__sidebar > *').fadeTo("fast", 1);
+}

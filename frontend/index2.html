@@ -36,6 +36,7 @@
                 <input class="add-frase__input" type="text" name="fraseTraducao" placeholder="Tradução">
                 <button id="btn-addFrase">Adicionar</button>
             </div>
+            <button id="btn-sendEmail">Frases aprendidas (email)</button>
             <button id="btn-verTraducao">Ver Tradução</button>
             <div class="card-holder">
                 <div class="card">
@@ -65,5 +66,25 @@
     <script src="public/js/async-request.js"></script>
     <script src="public/js/card-animation.js"></script>
     <script src="public/js/addFrase.js"></script>
+
+    <script>
+        const btnSenEmail = $('#btn-sendEmail');
+        btnSenEmail.on('click', () => {
+            $.ajax({
+                url: 'http://localhost:8080/post-email',
+                type: 'post',
+                dataType: 'html',
+                data: {
+                    userEmail: localStorage.getItem('email')
+                },
+                success: function (data) {
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>

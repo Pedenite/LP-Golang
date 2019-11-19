@@ -17,12 +17,16 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+
+	"github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 import ("strconv")
 
 const dir = "files/"     //diretório padrão dos arquivos
 const dir1 = "filesAux/" //diretório auxiliar dos arquivos
+const dir2 = "fileProgress/" //diretório progresso do usuário
 
 type Palavra struct {
 	peso	    	int
@@ -48,6 +52,46 @@ var objPalavras = ArrayPalavras{}
 
 var conjuntoP = &ConjuntoPalavras{}
 
+func sendEmail(userEmail string) {
+	var frases []string
+	files, err := ioutil.ReadDir(dir2)
+	if err != nil {
+		log.Println(err)
+	}
+	qtd := 0
+	for _, f := range files {
+		qtd++
+		fmt.Println("indice do arquivo:", qtd)
+		fmt.Println("Arquivo encontrado:", f.Name(), "\n")
+		temp := leArquivo(dir2 + f.Name())
+		frases = append(frases, temp...)
+	}
+
+	from := mail.NewEmail("Me", "kesley.kenny.kk@gmail.com")
+	subject := "Congratulations, seu porra"
+	to := mail.NewEmail("Me", userEmail)
+	plainTextContent := "dava pra fzr milior"
+	htmlContent := "<h1> Palavras aprendidas recentemente:<h1><br><h4>" + strings.Join(frases, "</h4><h4>")
+	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	client := sendgrid.NewSendClient("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")
+
+	response, err := client.Send(message)
+	if err != nil {
+		log.Println(err)
+	} else {
+		fmt.Println(response.StatusCode)
+		fmt.Println(response.Body)
+		fmt.Println(response.Headers)
+	} 
+}
+
+func sendEmailRoute(w http.ResponseWriter, r *http.Request) {
+	allowCORS(w)
+	userEmail := r.FormValue("userEmail")
+	sendEmail(userEmail)
+	json.NewEncoder(w).Encode("Mensagem enviada ao e-mail");
+}
+
 func (palavras *ConjuntoPalavras) Append(novaPalavra *Palavra) {
 	if palavras.tamanho == 0 {
 		palavras.inicio = novaPalavra
@@ -70,6 +114,10 @@ func (palavras *ConjuntoPalavras) Remove(palavra *Palavra) {
 		palavraAtual = palavraAtual.proxima
 	}
 	palavraAnterior.proxima = palavraAtual.proxima
+
+	if palavra.palavraOriginal != "" {
+		escrArquivo2(palavra.palavraOriginal)
+	}
 
 	conjuntoP.tamanho--
 	conjuntoP.ShowAndUpdate();
@@ -136,6 +184,21 @@ func escrArquivo1(original string, translated string) {
 	fmt.Println(c)
 	d, err := w.WriteString("\n")
 	fmt.Println(d)
+
+	f.Sync()
+	w.Flush()
+}
+
+func escrArquivo2(original string) {
+	f, err := os.OpenFile("fileProgress/completedUser", os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	w := bufio.NewWriter(f)
+	w.WriteString(original)
+	w.WriteString("\n")
 
 	f.Sync()
 	w.Flush()
@@ -347,6 +410,7 @@ func main() {
 	go router.HandleFunc("/palavra", getPalavra).Methods("GET")
 	go router.HandleFunc("/tamanho-lista", getTamanhoLista).Methods("GET")
 	go router.HandleFunc("/alterar-peso", postAlterarPeso).Methods("POST")
+	go router.HandleFunc("/post-email", sendEmailRoute).Methods("POST")
 	go router.HandleFunc("/nova-frase", postNovaFrase).Methods("POST")
 	go router.HandleFunc("/", index)
 	go router.HandleFunc("/login", getFormulario)
