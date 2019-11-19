@@ -23,14 +23,12 @@
     <main class="main">
         <div class="main__sidebar">
             <div class="palavras--qnt" id = "totalQnt">
-                <span>Total</span>
                 <span class="total-value">0</span>
             </div>
             <div class="palavras--aprendidas" id = "aprendidasQnt">
                 <span class="aprendidas-value">0</span>
             </div>
             <div class="palavras--aprendendo" id = "emAndamentoQnt">
-                <span>Em andamento</span>
                 <span class="andamento-value">0</span>
             </div>
         </div>
@@ -73,19 +71,21 @@
     <script src="public/js/CircularLoader-v1.3.js"></script>
     
     <script>
-            $(`#totalQnt`).circularloader({
-            backgroundColor: "#083975",//background colour of inner circle
-            fontColor: "#000000",//font color of progress text
-            fontSize: "40px",//font size of progress text
-            radius: 45,//radius of circle
-            progressBarBackground: "#cdcdcd",//background colour of circular progress Bar
-            progressBarColor: "#aaaaaa",//colour of circular progress bar
-            progressBarWidth: 15,//progress bar width
-            progressPercent: tamanhoLista ,//progress percentage out of 100
-            progressValue:  0,//diplay this value instead of percentage
-            showText: true,//show progress text or not
-            title: "Aprendidas",//show header title for the progress bar
+        function qntLoader(idContainer, progress, title) {
+            $(`#${idContainer}`).circularloader({
+                backgroundColor: "#fff",//background colour of inner circle
+                fontColor: "#000000",//font color of progress text
+                fontSize: "40px",//font size of progress text
+                radius: 45,//radius of circle
+                progressBarBackground: "#eee",//background colour of circular progress Bar
+                progressBarColor: "#0707",//colour of circular progress bar
+                progressBarWidth: 15,//progress bar width
+                progressPercent: progress ,//progress percentage out of 100
+                progressValue:  progress,//diplay this value instead of percentage
+                showText: true,//show progress text or not
+                title: title,//show header title for the progress bar
             });
+        }
     </script>
 </body>
 </html>

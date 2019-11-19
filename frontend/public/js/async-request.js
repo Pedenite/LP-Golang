@@ -60,7 +60,6 @@ function getTamanhoLista() {
         url : 'http://localhost:8080/tamanho-lista',
         dataType: 'json',
         success: function(data) {
-            console.log(data)
             if ((tamanhoLista-data) > aprendidas) {
                 aprendidas = tamanhoLista - data;
             }
@@ -70,7 +69,9 @@ function getTamanhoLista() {
             if((aprendidas + data) > tamanhoLista) {
                 tamanhoLista = aprendidas + data
             }
-
+            qntLoader('totalQnt', tamanhoLista, 'Total');
+            qntLoader('aprendidasQnt', aprendidas, 'Aprendidas');
+            
             $('.total-value').text(tamanhoLista);
             $('.aprendidas-value').text(aprendidas);
             $('.andamento-value').text(data);
