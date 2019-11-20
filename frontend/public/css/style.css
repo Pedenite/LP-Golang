@@ -23,7 +23,6 @@ html {
     display: none;
     justify-content: center;
     align-items: center;
-    
 }
 
 .pop-up__content {
@@ -34,9 +33,6 @@ html {
         rgba(239, 239, 255, .2) 60%,
         rgba(95, 89, 90, 0.479) 60%
     );
-    
-        
-    
 }
 
 .user-div {
@@ -46,9 +42,6 @@ html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  
-     
-    
 }
 
 #user-label {
@@ -119,34 +112,11 @@ html {
     align-items: center;
     justify-content: center;
 }
-.box1 input[type = "text"],.box1 input[type = "fraseOriginal"]{
-    background: none;
-    border: 2px solid rgb(177, 176, 176);
-    padding: 10px 15px;
-    outline: none;
-    border-radius: 24px;
-    transition: 24px; 
-    
-}
-.add-frase__container input[type = "text"],.box1 input[type = "fraseOriginal"]{
-    height: 40px;
-    width: 180px;
-}
 
 .main__sidebar > * {
     opacity: 0;
 }
-.box input[type = "submit"]{
-    border: 0;
-    background: #1956a5;
-    color:#ffff; 
-    border: 2px solid rgb(85, 244, 250);
-    padding: 5px 5px;
-    margin: 5px;
-    margin-left: 41%;
-    border-radius: 24px;
-    transition: 24px;
-}
+
 .main__content {
     background: radial-gradient(var(--primary-bg-color), rgb(168, 168, 231));
     display: flex;
@@ -183,26 +153,15 @@ html {
 }
 
 .btn {
-    border: 0;
-    background: none;
-    display: inline-block;
-    margin: 20px auto;
-    color:#ffff; 
-    border: 2px solid rgb(177, 176, 176);
-    padding: 14px 20px;
-    outline: none;
-    border-radius: 24px;
-    transition: 24px;
+    border: 1px solid rgb(201, 200, 200);
+    border-radius: 3px;
+    font-size: 1.6rem;
+    padding: .5rem 2rem;
+    box-shadow: rgba(0, 0, 0, .1) 0 .2rem 1rem;
 }
 
 .btn:not(:last-child) {
     margin-right: 1rem;
-}
-.btn-holder{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: -42px;
 }
 
 .btn:focus {
@@ -215,7 +174,9 @@ html {
 
 
 .card-holder {
-    margin-right: 58%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .card {
@@ -226,7 +187,6 @@ html {
     width: 20rem;
     height: 30rem;
     margin-bottom: 2rem;
-   
 }
 
 .card__side {
@@ -246,11 +206,7 @@ html {
     border-radius: 3px;
     box-shadow: rgba(0, 0, 0, .2) 0 1.5rem 4rem;
 }
-.boxh{
-    margin-top: 650px;
-    margin-left: 43%;
-    display: inline-block;
-}
+
 .card--front {
     background-color: rgb(14, 152, 156);
 }
@@ -262,14 +218,12 @@ html {
 
 .add-frase__container {
     position: fixed;
-    top: 0px;
+    top: -.5rem;
     background-color: #eee;
-    padding: 1rem 2rem 1rem ;
+    padding: 1rem 2rem 1rem 2rem;
     z-index: 10;
-    height: 100px;
     border-radius: 50px;
     box-shadow: rgba(0, 0, 0, .1) 0 .5rem 1rem;
-    
 }
 
 .add-frase__input {
