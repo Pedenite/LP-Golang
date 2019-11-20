@@ -183,17 +183,27 @@ html {
 }
 
 .btn {
-    border: 1px solid rgb(201, 200, 200);
-    border-radius: 3px;
-    font-size: 1.6rem;
-    padding: .5rem 2rem;
-    box-shadow: rgba(0, 0, 0, .1) 0 .2rem 1rem;
+    border: 0;
+    background: none;
+    display: inline-block;
+    margin: 20px auto;
+    color:#ffff; 
+    border: 2px solid rgb(177, 176, 176);
+    padding: 14px 20px;
+    outline: none;
+    border-radius: 24px;
+    transition: 24px;
 }
 
 .btn:not(:last-child) {
     margin-right: 1rem;
 }
-
+.btn-holder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -42px;
+}
 
 .btn:focus {
     outline: none;
@@ -205,9 +215,7 @@ html {
 
 
 .card-holder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin-right: 58%;
 }
 
 .card {
@@ -218,6 +226,7 @@ html {
     width: 20rem;
     height: 30rem;
     margin-bottom: 2rem;
+   
 }
 
 .card__side {
@@ -237,7 +246,11 @@ html {
     border-radius: 3px;
     box-shadow: rgba(0, 0, 0, .2) 0 1.5rem 4rem;
 }
-
+.boxh{
+    margin-top: 650px;
+    margin-left: 43%;
+    display: inline-block;
+}
 .card--front {
     background-color: rgb(14, 152, 156);
 }
@@ -249,7 +262,7 @@ html {
 
 .add-frase__container {
     position: fixed;
-    top: -.5rem;
+    top: 0px;
     background-color: #eee;
     padding: 1rem 2rem 1rem ;
     z-index: 10;
