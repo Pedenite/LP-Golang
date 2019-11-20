@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,41 +10,38 @@
     <link rel="stylesheet" href="./public/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="pop-up">
-            <div class="pop-up__content">
-                <div class="user-div">
-                    <label id="user-label" for="email">E-mail</label>
-                    <input id="user-input" type="email" name="email">
-                    <button id="auth-btn">Autenticar</button>
-                </div>
+        <div class="pop-up__content">
+            <div class="user-div">
+                <label id="user-label" for="email">E-mail</label>
+                <input id="user-input" type="email" name="email">
+                <button id="auth-btn">Autenticar</button>
             </div>
+        </div>
     </div>
 
     <main class="main">
         <div class="main__sidebar">
-            <div class="palavras--qnt" id = "totalQnt">
+            <div class="palavras--qnt" id="totalQnt">
             </div>
-            <div class="palavras--aprendidas" id = "aprendidasQnt">
+            <div class="palavras--aprendidas" id="aprendidasQnt">
             </div>
-            <div class="palavras--aprendendo" id = "emAndamentoQnt">
+            <div class="palavras--aprendendo" id="emAndamentoQnt">
             </div>
         </div>
 
         <div class="main__content">
             <div class="add-frase__container">
-                <div class="box1">    
-                    <input class="add-frase__input" type="text" name="fraseOriginal" placeholder="Original">
-                    <input class="add-frase__input" type="text" name="fraseTraducao" placeholder="Tradução">
-                </div>
-                    <div class="box">
-                        <input type="submit" id="btn-addFrase" value="Adicionar">
-                    </div>
+                <input class="add-frase__input" type="text" name="fraseOriginal" placeholder="Original">
+                <input class="add-frase__input" type="text" name="fraseTraducao" placeholder="Tradução">
+                <input type="submit" id="btn-addFrase" value="Adicionar">
             </div>
-            <div class="boxh">
+            <div>
+                <button id="btn-verTraducao">Ver Tradução</button><br>
                 <button id="btn-sendEmail">Frases aprendidas (email)</button>
-                <button id="btn-verTraducao">Ver Tradução</button>    
-            </div> 
+            </div>
             <div class="card-holder">
                 <div class="card">
                     <div class="card__side card--front" id="card-front">
@@ -62,11 +60,9 @@
         </div>
     </main>
 
-    <script
-        src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous">
-    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
+        </script>
     <script src="public/js/CircularLoader-v1.3.js"></script>
     <script src="public/js/animations.js"></script>
     <script src="public/js/async-request.js"></script>
@@ -93,4 +89,5 @@
     </script>
 
 </body>
+
 </html>
