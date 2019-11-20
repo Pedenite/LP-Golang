@@ -1,0 +1,264 @@
+Looking for git in: git
+Using git 2.17.0 from git
+> git rev-parse --show-toplevel
+> git rev-parse --git-dir
+> git config --get commit.template
+Open repository: /home/nosdyek/Downloads/go/src/GOPATH/src/github/nosdyek/rest-api/LP-Golang
+> git status -z -u
+> git check-ignore -v -z --stdin
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git show :proj.go
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git check-ignore -v -z --stdin
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git check-ignore -v -z --stdin
+> git check-ignore -v -z --stdin
+> git check-ignore -v -z --stdin
+> git check-ignore -v -z --stdin
+> git show :frontend/public/js/async-request.js
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git show :frontend/public/js/CircularLoader-v1.3.js
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git show :frontend/public/js/async-request.js
+> git show :frontend/public/js/CircularLoader-v1.3.js
+> git show :frontend/public/js/async-request.js
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git show :frontend/public/js/CircularLoader-v1.3.js
+> git show :frontend/public/js/async-request.js
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git show :frontend/public/js/CircularLoader-v1.3.js
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse SPA
+> git rev-parse --symbolic-full-name SPA@{u}
+> git rev-list --left-right SPA...refs/remotes/origin/SPA
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git check-ignore -v -z --stdin
+> git show :proj.go
+> git push origin SPA:SPA
+remote: No anonymous write access.
+fatal: Authentication failed for 'https://github.com/Pedenite/LP-Golang.git/'
