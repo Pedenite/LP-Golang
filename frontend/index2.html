@@ -11,13 +11,13 @@
 </head>
 <body>
     <div class="pop-up">
-        <div class="pop-up__content">
-            <div class="user-div">
-                <label id="user-label" for="email">E-mail</label>
-                <input id="user-input" type="email" name="email">
-                <button id="auth-btn">Autenticar</button>
+            <div class="pop-up__content">
+                <div class="user-div">
+                    <label id="user-label" for="email">E-mail</label>
+                    <input id="user-input" type="email" name="email">
+                    <button id="auth-btn">Autenticar</button>
+                </div>
             </div>
-        </div>
     </div>
 
     <main class="main">
@@ -32,9 +32,13 @@
 
         <div class="main__content">
             <div class="add-frase__container">
-                <input class="add-frase__input" type="text" name="fraseOriginal" placeholder="Original">
-                <input class="add-frase__input" type="text" name="fraseTraducao" placeholder="Tradução">
-                <button id="btn-addFrase">Adicionar</button>
+                <div class="box1">    
+                    <input class="add-frase__input" type="text" name="fraseOriginal" placeholder="Original">
+                    <input class="add-frase__input" type="text" name="fraseTraducao" placeholder="Tradução">
+                </div>
+                    <div class="box">
+                        <input type="submit" value="Adicionar">
+                    </div>
             </div>
             <button id="btn-sendEmail">Frases aprendidas (email)</button>
             <button id="btn-verTraducao">Ver Tradução</button>

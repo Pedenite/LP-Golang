@@ -23,6 +23,7 @@ html {
     display: none;
     justify-content: center;
     align-items: center;
+    
 }
 
 .pop-up__content {
@@ -33,6 +34,9 @@ html {
         rgba(239, 239, 255, .2) 60%,
         rgba(95, 89, 90, 0.479) 60%
     );
+    
+        
+    
 }
 
 .user-div {
@@ -42,6 +46,9 @@ html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  
+     
+    
 }
 
 #user-label {
@@ -112,11 +119,34 @@ html {
     align-items: center;
     justify-content: center;
 }
+.box1 input[type = "text"],.box1 input[type = "fraseOriginal"]{
+    background: none;
+    border: 2px solid rgb(177, 176, 176);
+    padding: 10px 15px;
+    outline: none;
+    border-radius: 24px;
+    transition: 24px; 
+    
+}
+.add-frase__container input[type = "text"],.box1 input[type = "fraseOriginal"]{
+    height: 40px;
+    width: 180px;
+}
 
 .main__sidebar > * {
     opacity: 0;
 }
-
+.box input[type = "submit"]{
+    border: 0;
+    background: #1956a5;
+    color:#ffff; 
+    border: 2px solid rgb(85, 244, 250);
+    padding: 5px 5px;
+    margin: 5px;
+    margin-left: 41%;
+    border-radius: 24px;
+    transition: 24px;
+}
 .main__content {
     background: radial-gradient(var(--primary-bg-color), rgb(168, 168, 231));
     display: flex;
@@ -163,6 +193,7 @@ html {
 .btn:not(:last-child) {
     margin-right: 1rem;
 }
+
 
 .btn:focus {
     outline: none;
@@ -220,10 +251,12 @@ html {
     position: fixed;
     top: -.5rem;
     background-color: #eee;
-    padding: 1rem 2rem 1rem 2rem;
+    padding: 1rem 2rem 1rem ;
     z-index: 10;
+    height: 100px;
     border-radius: 50px;
     box-shadow: rgba(0, 0, 0, .1) 0 .5rem 1rem;
+    
 }
 
 .add-frase__input {

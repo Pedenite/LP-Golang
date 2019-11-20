@@ -18,18 +18,18 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"strconv"
+
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
-import ("strconv")
-
-const dir = "files/"     //diretório padrão dos arquivos
-const dir1 = "filesAux/" //diretório auxiliar dos arquivos
+const dir = "files/"         //diretório padrão dos arquivos
+const dir1 = "filesAux/"     //diretório auxiliar dos arquivos
 const dir2 = "fileProgress/" //diretório progresso do usuário
 
 type Palavra struct {
-	peso	    	int
+	peso            int
 	palavraOriginal string
 	palavraTraducao string
 	anterior        *Palavra
@@ -82,14 +82,14 @@ func sendEmail(userEmail string) {
 		fmt.Println(response.StatusCode)
 		fmt.Println(response.Body)
 		fmt.Println(response.Headers)
-	} 
+	}
 }
 
 func sendEmailRoute(w http.ResponseWriter, r *http.Request) {
 	allowCORS(w)
 	userEmail := r.FormValue("userEmail")
 	sendEmail(userEmail)
-	json.NewEncoder(w).Encode("Mensagem enviada ao e-mail");
+	json.NewEncoder(w).Encode("Mensagem enviada ao e-mail")
 }
 
 func (palavras *ConjuntoPalavras) Append(novaPalavra *Palavra) {
@@ -120,7 +120,7 @@ func (palavras *ConjuntoPalavras) Remove(palavra *Palavra) {
 	}
 
 	conjuntoP.tamanho--
-	conjuntoP.ShowAndUpdate();
+	conjuntoP.ShowAndUpdate()
 }
 
 func (palavras *ConjuntoPalavras) ShowAndUpdate() {
@@ -169,6 +169,7 @@ func leArquivo(arquivo string) []string {
 }
 
 func escrArquivo1(original string, translated string) {
+
 	f, err := os.OpenFile("files/inglesUser", os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		panic(err)
@@ -187,6 +188,7 @@ func escrArquivo1(original string, translated string) {
 
 	f.Sync()
 	w.Flush()
+
 }
 
 func escrArquivo2(original string) {
@@ -234,20 +236,20 @@ func postNovaFrase(w http.ResponseWriter, r *http.Request) {
 	}
 	conjuntoP.Append(&palavra)
 	conjuntoP.ShowAndUpdate()
-	json.NewEncoder(w).Encode("frase adicionada");
+	json.NewEncoder(w).Encode("frase adicionada")
 }
 
 func postAlterarPeso(w http.ResponseWriter, r *http.Request) {
 	allowCORS(w)
 	if conjuntoP.tamanho == 1 {
-		json.NewEncoder(w).Encode("processo finalizado");
+		json.NewEncoder(w).Encode("processo finalizado")
 	} else {
 		palavra := r.FormValue("palavra")
 		pesoString := r.FormValue("peso")
 		peso, err := strconv.Atoi(pesoString)
 
 		if err != nil {
-			fmt.Println("parser error")	
+			fmt.Println("parser error")
 		}
 
 		contador := 0
@@ -395,7 +397,7 @@ func main() {
 			p1 = frases[i]
 			p2 = frases[i+1]
 			palavra := Palavra{
-				peso: 3,
+				peso:            3,
 				palavraOriginal: p1,
 				palavraTraducao: p2,
 			}
