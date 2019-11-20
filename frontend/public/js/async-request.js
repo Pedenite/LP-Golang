@@ -70,7 +70,7 @@ function getTamanhoLista() {
                 tamanhoLista = aprendidas + data
             }
 
-            qntLoader('totalQnt', tamanhoLista, 'Total', "#ffffff", "#083975", "#083975", 0);
+            qntLoader('totalQnt', tamanhoLista, 'Total', "#ffffff", "transparent", "transparent", tamanhoLista);
             qntLoader('aprendidasQnt', ((aprendidas*100)/tamanhoLista), 'Aprendidas',"#ffffff", "#00f7ff", "#ffffff", null);
             qntLoader('emAndamentoQnt', 100 - ((aprendidas*100)/tamanhoLista), 'Andamento',"#a6ffce","#00ff72","#a6ffce", null);
 

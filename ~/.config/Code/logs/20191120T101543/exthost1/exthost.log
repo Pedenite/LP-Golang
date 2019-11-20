@@ -94,3 +94,7 @@ Error: Debug Failure.
 	at readableAddChunk (_stream_readable.js:264:11)
 	at Socket.Readable.push (_stream_readable.js:219:10)
 	at Pipe.onStreamRead [as onread] (internal/stream_base_commons.js:94:17)
+[2019-11-20 14:33:04.626] [exthost] [info] ExtensionService#_doActivateExtension vscode.css-language-features {"startup":false,"extensionId":{"value":"vscode.css-language-features","_lower":"vscode.css-language-features"},"activationEvent":"onLanguage:css"}
+[2019-11-20 14:33:04.626] [exthost] [info] ExtensionService#loadCommonJSModule file:///usr/share/code/resources/app/extensions/css-language-features/client/dist/cssMain
+[2019-11-20 14:33:14.988] [exthost] [info] ExtensionService#_doActivateExtension vscode.html-language-features {"startup":false,"extensionId":{"value":"vscode.html-language-features","_lower":"vscode.html-language-features"},"activationEvent":"onLanguage:html"}
+[2019-11-20 14:33:14.988] [exthost] [info] ExtensionService#loadCommonJSModule file:///usr/share/code/resources/app/extensions/html-language-features/client/dist/htmlMain
