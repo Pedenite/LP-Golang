@@ -158,6 +158,11 @@ html {
     font-size: 1.6rem;
     padding: .5rem 2rem;
     box-shadow: rgba(0, 0, 0, .1) 0 .2rem 1rem;
+    color:#ffff; 
+    border: 2px solid rgb(177, 176, 176);
+    padding: 8px 10px;
+    outline: none;
+    border-radius: 24px;
 }
 
 .btn:not(:last-child) {
@@ -228,4 +233,9 @@ html {
 
 .add-frase__input {
     font-size: 1.5rem;
+    color:#ffff; 
+    border: 2px solid rgb(14, 152, 156);
+    padding: 8px 10px;
+    outline: none;
+    border-radius: 24px;
 }
