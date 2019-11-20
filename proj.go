@@ -18,18 +18,18 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"strconv"
-
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
-const dir = "files/"         //diretório padrão dos arquivos
-const dir1 = "filesAux/"     //diretório auxiliar dos arquivos
+import ("strconv")
+
+const dir = "files/"     //diretório padrão dos arquivos
+const dir1 = "filesAux/" //diretório auxiliar dos arquivos
 const dir2 = "fileProgress/" //diretório progresso do usuário
 
 type Palavra struct {
-	peso            int
+	peso	    	int
 	palavraOriginal string
 	palavraTraducao string
 	anterior        *Palavra
@@ -82,14 +82,14 @@ func sendEmail(userEmail string) {
 		fmt.Println(response.StatusCode)
 		fmt.Println(response.Body)
 		fmt.Println(response.Headers)
-	}
+	} 
 }
 
 func sendEmailRoute(w http.ResponseWriter, r *http.Request) {
 	allowCORS(w)
 	userEmail := r.FormValue("userEmail")
 	sendEmail(userEmail)
-	json.NewEncoder(w).Encode("Mensagem enviada ao e-mail")
+	json.NewEncoder(w).Encode("Mensagem enviada ao e-mail");
 }
 
 func (palavras *ConjuntoPalavras) Append(novaPalavra *Palavra) {
@@ -120,7 +120,7 @@ func (palavras *ConjuntoPalavras) Remove(palavra *Palavra) {
 	}
 
 	conjuntoP.tamanho--
-	conjuntoP.ShowAndUpdate()
+	conjuntoP.ShowAndUpdate();
 }
 
 func (palavras *ConjuntoPalavras) ShowAndUpdate() {
@@ -139,6 +139,22 @@ func (palavras *ConjuntoPalavras) ShowAndUpdate() {
 	}
 }
 
+func checkTxtNull(arquivo string) int{
+	file, err := os.Open(arquivo)
+	if err != nil { //tratamento de erro
+		fmt.Println(err)
+		return -2
+	}
+	defer file.Close() //vai ser executado apenas ao fim da função por causa do defer
+	reader := bufio.NewReader(file)
+	linha, err:= reader.ReadString('$')
+	if linha != "$" {
+		return 1
+	}else{
+		return 0
+	}
+}
+
 func leArquivo(arquivo string) []string {
 	var frases []string
 	file, err := os.Open(arquivo)
@@ -148,47 +164,69 @@ func leArquivo(arquivo string) []string {
 	}
 	defer file.Close() //vai ser executado apenas ao fim da função por causa do defer
 	reader := bufio.NewReader(file)
-	for {
-		linha, err := reader.ReadString('-')
-		linha = strings.TrimSpace(linha)                //Para eliminar espacos desnecessarios no inicio e fim de strings
-		noDashes := strings.Replace(linha, "-", "", -1) //Elimina o caractere '-'
+	if checkTxtNull(arquivo) == 1 {
+		for {
+			linha, err := reader.ReadString('-')
+			linha = strings.TrimSpace(linha)                //Para eliminar espacos desnecessarios no inicio e fim de strings
+			noDashes := strings.Replace(linha, "-", "", -1) //Elimina o caractere '-'
 
-		frases = append(frases, noDashes)
+			frases = append(frases, noDashes)
 
-		linha, err = reader.ReadString('\n')
-		linha = strings.TrimSpace(linha) //Para eliminar espacos desnecessarios no inicio e fim de strings
+			linha, err = reader.ReadString('\n')
+			linha = strings.TrimSpace(linha) //Para eliminar espacos desnecessarios no inicio e fim de strings
 
-		frases = append(frases, linha)
+			frases = append(frases, linha)
 
-		if err == io.EOF {
-			break
+			if err == io.EOF {
+				break
+			}
+
 		}
-
+		return frases
 	}
-	return frases
+	return nil
 }
 
 func escrArquivo1(original string, translated string) {
+    if checkTxtNull("files/inglesUser") == 0 {
+        f, err := os.OpenFile("files/inglesUser", os.O_WRONLY|os.O_APPEND, 0644)
+        if err != nil {
+            panic(err)
+        }
+        defer f.Close()
 
-	f, err := os.OpenFile("files/inglesUser", os.O_WRONLY|os.O_APPEND, 0644)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
+        w := bufio.NewWriter(f)
+        d, err := w.WriteString("\n")
+        fmt.Println(d)
+        a, err := w.WriteString(original)
+        fmt.Println(a)
+        b, err := w.WriteString(" - ")
+        fmt.Println(b)
+        c, err := w.WriteString(translated)
+        fmt.Println(c)
 
-	w := bufio.NewWriter(f)
-	a, err := w.WriteString(original)
-	fmt.Println(a)
-	b, err := w.WriteString(" - ")
-	fmt.Println(b)
-	c, err := w.WriteString(translated)
-	fmt.Println(c)
-	d, err := w.WriteString("\n")
-	fmt.Println(d)
+        f.Sync()
+        w.Flush()
+    }else{
+        f, err := os.OpenFile("files/inglesUser", os.O_WRONLY|os.O_APPEND, 0644)
+        if err != nil {
+            panic(err)
+        }
+        defer f.Close()
 
-	f.Sync()
-	w.Flush()
+        w := bufio.NewWriter(f)
+        a, err := w.WriteString(original)
+        fmt.Println(a)
+        b, err := w.WriteString(" - ")
+        fmt.Println(b)
+        c, err := w.WriteString(translated)
+        fmt.Println(c)
+        d, err := w.WriteString("\n")
+        fmt.Println(d)
 
+        f.Sync()
+        w.Flush()
+    }
 }
 
 func escrArquivo2(original string) {
@@ -236,20 +274,20 @@ func postNovaFrase(w http.ResponseWriter, r *http.Request) {
 	}
 	conjuntoP.Append(&palavra)
 	conjuntoP.ShowAndUpdate()
-	json.NewEncoder(w).Encode("frase adicionada")
+	json.NewEncoder(w).Encode("frase adicionada");
 }
 
 func postAlterarPeso(w http.ResponseWriter, r *http.Request) {
 	allowCORS(w)
 	if conjuntoP.tamanho == 1 {
-		json.NewEncoder(w).Encode("processo finalizado")
+		json.NewEncoder(w).Encode("processo finalizado");
 	} else {
 		palavra := r.FormValue("palavra")
 		pesoString := r.FormValue("peso")
 		peso, err := strconv.Atoi(pesoString)
 
 		if err != nil {
-			fmt.Println("parser error")
+			fmt.Println("parser error")	
 		}
 
 		contador := 0
@@ -397,7 +435,7 @@ func main() {
 			p1 = frases[i]
 			p2 = frases[i+1]
 			palavra := Palavra{
-				peso:            3,
+				peso: 3,
 				palavraOriginal: p1,
 				palavraTraducao: p2,
 			}
