@@ -153,6 +153,7 @@ html {
     outline: none;
 }
 
+
 .btn {
     border: 1px solid rgb(201, 200, 200);
     border-radius: 3px;
@@ -161,12 +162,12 @@ html {
     box-shadow: rgba(0, 0, 0, .1) 0 .2rem 1rem;
     color:#ffff; 
     background-color:rgb(14, 152, 156);
-    border: 2px solid rgb(0, 247, 255);
+    border: 2px solid #073975;
     padding: 8px 10px;
     outline: none;
     border-radius: 24px;
+    margin-bottom: 10px;
 }
-
 .btn:not(:last-child) {
     margin-right: 1rem;
 }
@@ -187,6 +188,7 @@ html {
 }
 
 .card {
+    margin-top: 80px;
     perspective: 150rem;
     -moz-perspective: 150rem;
     text-align: center;
@@ -236,7 +238,7 @@ html {
 
 .add-frase__input {
     font-size: 1.5rem;
-    color:#ffff; 
+    color:rgb(0, 0, 0); 
     border: 2px solid rgb(14, 152, 156);
     padding: 8px 10px;
     outline: none;
@@ -249,18 +251,4 @@ html {
     text-align: center;
 }
 
-.btn-holder--2 {
-    margin-top: 2rem;
-}
 
-.btn-sendEmail--1 {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-}
-
-.btn-sendEmail--2 {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-}
