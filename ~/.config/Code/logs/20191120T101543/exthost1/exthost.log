@@ -1,0 +1,100 @@
+[2019-11-20 10:15:51.484] [exthost] [info] extension host started
+[2019-11-20 10:15:51.497] [exthost] [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch {"startup":true,"extensionId":{"value":"vscode.debug-auto-launch","_lower":"vscode.debug-auto-launch"},"activationEvent":"*"}
+[2019-11-20 10:15:51.497] [exthost] [info] ExtensionService#loadCommonJSModule file:///usr/share/code/resources/app/extensions/debug-auto-launch/dist/extension
+[2019-11-20 10:15:51.557] [exthost] [info] ExtensionService#_doActivateExtension vscode.emmet {"startup":true,"extensionId":{"value":"vscode.emmet","_lower":"vscode.emmet"},"activationEvent":"*"}
+[2019-11-20 10:15:51.557] [exthost] [info] ExtensionService#loadCommonJSModule file:///usr/share/code/resources/app/extensions/emmet/dist/extension
+[2019-11-20 10:15:51.620] [exthost] [info] ExtensionService#_doActivateExtension vscode.git {"startup":true,"extensionId":{"value":"vscode.git","_lower":"vscode.git"},"activationEvent":"*"}
+[2019-11-20 10:15:51.620] [exthost] [info] ExtensionService#loadCommonJSModule file:///usr/share/code/resources/app/extensions/git/dist/main
+[2019-11-20 10:15:51.862] [exthost] [info] ExtensionService#_doActivateExtension vscode.merge-conflict {"startup":true,"extensionId":{"value":"vscode.merge-conflict","_lower":"vscode.merge-conflict"},"activationEvent":"*"}
+[2019-11-20 10:15:51.863] [exthost] [info] ExtensionService#loadCommonJSModule file:///usr/share/code/resources/app/extensions/merge-conflict/dist/extension
+[2019-11-20 10:15:51.885] [exthost] [info] eager extensions activated
+[2019-11-20 10:17:45.652] [exthost] [info] ExtensionService#_doActivateExtension vscode.typescript-language-features {"startup":false,"extensionId":{"value":"vscode.typescript-language-features","_lower":"vscode.typescript-language-features"},"activationEvent":"onLanguage:javascript"}
+[2019-11-20 10:17:45.652] [exthost] [info] ExtensionService#loadCommonJSModule file:///usr/share/code/resources/app/extensions/typescript-language-features/dist/extension
+[2019-11-20 10:17:55.094] [exthost] [info] ExtensionService#_doActivateExtension vscode.extension-editing {"startup":false,"extensionId":{"value":"vscode.extension-editing","_lower":"vscode.extension-editing"},"activationEvent":"onLanguage:typescript"}
+[2019-11-20 10:17:55.094] [exthost] [info] ExtensionService#loadCommonJSModule file:///usr/share/code/resources/app/extensions/extension-editing/dist/extension
+[2019-11-20 10:26:35.979] [exthost] [error] [vscode.typescript-language-features] provider FAILED
+[2019-11-20 10:26:35.981] [exthost] [error] Error: <semantic> TypeScript Server Error (3.6.3)
+Debug Failure.
+Error: Debug Failure.
+    at Object.assertDefined (tsserver.js:2101:24)
+    at getRangeToExtract (tsserver.js:122874:43)
+    at Object.getAvailableActions (tsserver.js:122838:28)
+    at tsserver.js:115901:128
+    at getIterator (tsserver.js:637:23)
+    at Object.next (tsserver.js:632:35)
+    at Object.arrayFrom (tsserver.js:1276:88)
+    at Object.getApplicableRefactors (tsserver.js:115900:23)
+    at Object.getApplicableRefactors (tsserver.js:126101:32)
+    at IOSession.Session.getApplicableRefactors (tsserver.js:135013:53)
+    at Session.handlers.ts.createMapFromTemplate._a.(anonymous function) (tsserver.js:133868:61)
+    at tsserver.js:135256:88
+    at IOSession.Session.executeWithRequestId (tsserver.js:135247:28)
+    at IOSession.Session.executeCommand (tsserver.js:135256:33)
+    at IOSession.Session.onMessage (tsserver.js:135279:35)
+    at Interface.<anonymous> (tsserver.js:136594:27)
+    at Interface.emit (events.js:182:13)
+    at Interface._onLine (readline.js:290:10)
+    at Interface._normalWrite (readline.js:433:12)
+    at Socket.ondata (readline.js:149:10)
+    at Socket.emit (events.js:182:13)
+    at addChunk (_stream_readable.js:283:12)
+    at readableAddChunk (_stream_readable.js:264:11)
+    at Socket.Readable.push (_stream_readable.js:219:10)
+    at Pipe.onStreamRead [as onread] (internal/stream_base_commons.js:94:17)
+	at Function.create (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:63415)
+	at h.dispatchResponse (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:56570)
+	at h.dispatchMessage (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:55468)
+	at _reader.onData.e (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:54944)
+	at l.fire (/usr/share/code/resources/app/out/vs/workbench/services/extensions/node/extensionHostProcess.js:50:519)
+	at t.Reader.onLengthData (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:61635)
+	at Socket.e.on.e (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:61283)
+	at Socket.emit (events.js:182:13)
+	at addChunk (_stream_readable.js:283:12)
+	at readableAddChunk (_stream_readable.js:264:11)
+	at Socket.Readable.push (_stream_readable.js:219:10)
+	at Pipe.onStreamRead [as onread] (internal/stream_base_commons.js:94:17)
+[2019-11-20 10:27:30.306] [exthost] [error] [vscode.typescript-language-features] provider FAILED
+[2019-11-20 10:27:30.306] [exthost] [error] Error: <semantic> TypeScript Server Error (3.6.3)
+Debug Failure.
+Error: Debug Failure.
+    at Object.assertDefined (tsserver.js:2101:24)
+    at getRangeToExtract (tsserver.js:122874:43)
+    at Object.getAvailableActions (tsserver.js:122838:28)
+    at tsserver.js:115901:128
+    at getIterator (tsserver.js:637:23)
+    at Object.next (tsserver.js:632:35)
+    at Object.arrayFrom (tsserver.js:1276:88)
+    at Object.getApplicableRefactors (tsserver.js:115900:23)
+    at Object.getApplicableRefactors (tsserver.js:126101:32)
+    at IOSession.Session.getApplicableRefactors (tsserver.js:135013:53)
+    at Session.handlers.ts.createMapFromTemplate._a.(anonymous function) (tsserver.js:133868:61)
+    at tsserver.js:135256:88
+    at IOSession.Session.executeWithRequestId (tsserver.js:135247:28)
+    at IOSession.Session.executeCommand (tsserver.js:135256:33)
+    at IOSession.Session.onMessage (tsserver.js:135279:35)
+    at Interface.<anonymous> (tsserver.js:136594:27)
+    at Interface.emit (events.js:182:13)
+    at Interface._onLine (readline.js:290:10)
+    at Interface._normalWrite (readline.js:433:12)
+    at Socket.ondata (readline.js:149:10)
+    at Socket.emit (events.js:182:13)
+    at addChunk (_stream_readable.js:283:12)
+    at readableAddChunk (_stream_readable.js:264:11)
+    at Socket.Readable.push (_stream_readable.js:219:10)
+    at Pipe.onStreamRead [as onread] (internal/stream_base_commons.js:94:17)
+	at Function.create (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:63415)
+	at h.dispatchResponse (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:56570)
+	at h.dispatchMessage (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:55468)
+	at _reader.onData.e (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:54944)
+	at l.fire (/usr/share/code/resources/app/out/vs/workbench/services/extensions/node/extensionHostProcess.js:50:519)
+	at t.Reader.onLengthData (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:61635)
+	at Socket.e.on.e (/usr/share/code/resources/app/extensions/typescript-language-features/dist/extension.js:53:61283)
+	at Socket.emit (events.js:182:13)
+	at addChunk (_stream_readable.js:283:12)
+	at readableAddChunk (_stream_readable.js:264:11)
+	at Socket.Readable.push (_stream_readable.js:219:10)
+	at Pipe.onStreamRead [as onread] (internal/stream_base_commons.js:94:17)
+[2019-11-20 14:33:04.626] [exthost] [info] ExtensionService#_doActivateExtension vscode.css-language-features {"startup":false,"extensionId":{"value":"vscode.css-language-features","_lower":"vscode.css-language-features"},"activationEvent":"onLanguage:css"}
+[2019-11-20 14:33:04.626] [exthost] [info] ExtensionService#loadCommonJSModule file:///usr/share/code/resources/app/extensions/css-language-features/client/dist/cssMain
+[2019-11-20 14:33:14.988] [exthost] [info] ExtensionService#_doActivateExtension vscode.html-language-features {"startup":false,"extensionId":{"value":"vscode.html-language-features","_lower":"vscode.html-language-features"},"activationEvent":"onLanguage:html"}
+[2019-11-20 14:33:14.988] [exthost] [info] ExtensionService#loadCommonJSModule file:///usr/share/code/resources/app/extensions/html-language-features/client/dist/htmlMain

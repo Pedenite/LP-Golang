@@ -17,12 +17,19 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+
+	"strconv"
+
+	"github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
-const dir = "files/"     //diretório padrão dos arquivos
-const dir1 = "filesAux/" //diretório auxiliar dos arquivos
+const dir = "files/"         //diretório padrão dos arquivos
+const dir1 = "filesAux/"     //diretório auxiliar dos arquivos
+const dir2 = "fileProgress/" //diretório progresso do usuário
 
 type Palavra struct {
+	peso            int
 	palavraOriginal string
 	palavraTraducao string
 	anterior        *Palavra
@@ -45,6 +52,46 @@ var objPalavras = ArrayPalavras{}
 
 var conjuntoP = &ConjuntoPalavras{}
 
+func sendEmail(userEmail string) {
+	var frases []string
+	files, err := ioutil.ReadDir(dir2)
+	if err != nil {
+		log.Println(err)
+	}
+	qtd := 0
+	for _, f := range files {
+		qtd++
+		fmt.Println("indice do arquivo:", qtd)
+		fmt.Println("Arquivo encontrado:", f.Name(), "\n")
+		temp := leArquivo(dir2 + f.Name())
+		frases = append(frases, temp...)
+	}
+
+	from := mail.NewEmail("Me", "kesley.kenny.kk@gmail.com")
+	subject := "Parabéns por se dedicar aos estudos!"
+	to := mail.NewEmail("Me", userEmail)
+	plainTextContent := "Congrats! ;)"
+	htmlContent := "<h1> Palavras aprendidas recentemente:<h1><br><h4>" + strings.Join(frases, "</h4><h4>")
+	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	client := sendgrid.NewSendClient("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")
+
+	response, err := client.Send(message)
+	if err != nil {
+		log.Println(err)
+	} else {
+		fmt.Println(response.StatusCode)
+		fmt.Println(response.Body)
+		fmt.Println(response.Headers)
+	}
+}
+
+func sendEmailRoute(w http.ResponseWriter, r *http.Request) {
+	allowCORS(w)
+	userEmail := r.FormValue("userEmail")
+	sendEmail(userEmail)
+	json.NewEncoder(w).Encode("Mensagem enviada ao e-mail")
+}
+
 func (palavras *ConjuntoPalavras) Append(novaPalavra *Palavra) {
 	if palavras.tamanho == 0 {
 		palavras.inicio = novaPalavra
@@ -56,6 +103,24 @@ func (palavras *ConjuntoPalavras) Append(novaPalavra *Palavra) {
 		palavras.fim = novaPalavra
 	}
 	palavras.tamanho++
+}
+
+func (palavras *ConjuntoPalavras) Remove(palavra *Palavra) {
+	var palavraAnterior *Palavra
+	palavraAtual := conjuntoP.inicio
+
+	for palavraAtual != palavra {
+		palavraAnterior = palavraAtual
+		palavraAtual = palavraAtual.proxima
+	}
+	palavraAnterior.proxima = palavraAtual.proxima
+
+	if palavra.palavraOriginal != "" {
+		escrArquivo2(palavra.palavraOriginal)
+	}
+
+	conjuntoP.tamanho--
+	conjuntoP.ShowAndUpdate()
 }
 
 func (palavras *ConjuntoPalavras) ShowAndUpdate() {
@@ -74,6 +139,22 @@ func (palavras *ConjuntoPalavras) ShowAndUpdate() {
 	}
 }
 
+func checkTxtNull(arquivo string) int {
+	file, err := os.Open(arquivo)
+	if err != nil { //tratamento de erro
+		fmt.Println(err)
+		return -2
+	}
+	defer file.Close() //vai ser executado apenas ao fim da função por causa do defer
+	reader := bufio.NewReader(file)
+	linha, err := reader.ReadString('$')
+	if linha != "$" {
+		return 1
+	} else {
+		return 0
+	}
+}
+
 func leArquivo(arquivo string) []string {
 	var frases []string
 	file, err := os.Open(arquivo)
@@ -83,42 +164,81 @@ func leArquivo(arquivo string) []string {
 	}
 	defer file.Close() //vai ser executado apenas ao fim da função por causa do defer
 	reader := bufio.NewReader(file)
-	for {
-		linha, err := reader.ReadString('-')
-		linha = strings.TrimSpace(linha)                //Para eliminar espacos desnecessarios no inicio e fim de strings
-		noDashes := strings.Replace(linha, "-", "", -1) //Elimina o caractere '-'
+	if checkTxtNull(arquivo) == 1 {
+		for {
+			linha, err := reader.ReadString('-')
+			linha = strings.TrimSpace(linha)                //Para eliminar espacos desnecessarios no inicio e fim de strings
+			noDashes := strings.Replace(linha, "-", "", -1) //Elimina o caractere '-'
 
-		frases = append(frases, noDashes)
+			frases = append(frases, noDashes)
 
-		linha, err = reader.ReadString('\n')
-		linha = strings.TrimSpace(linha) //Para eliminar espacos desnecessarios no inicio e fim de strings
+			linha, err = reader.ReadString('\n')
+			linha = strings.TrimSpace(linha) //Para eliminar espacos desnecessarios no inicio e fim de strings
 
-		frases = append(frases, linha)
+			frases = append(frases, linha)
 
-		if err == io.EOF {
-			break
+			if err == io.EOF {
+				break
+			}
+
 		}
-
+		return frases
 	}
-	return frases
+	return nil
 }
 
 func escrArquivo1(original string, translated string) {
-	f, err := os.OpenFile("files/inglesUser", os.O_WRONLY|os.O_APPEND, 0644)
+	if checkTxtNull("files/inglesUser") == 0 {
+		f, err := os.OpenFile("files/inglesUser", os.O_WRONLY|os.O_APPEND, 0644)
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
+
+		w := bufio.NewWriter(f)
+		d, err := w.WriteString("\n")
+		fmt.Println(d)
+		a, err := w.WriteString(original)
+		fmt.Println(a)
+		b, err := w.WriteString(" - ")
+		fmt.Println(b)
+		c, err := w.WriteString(translated)
+		fmt.Println(c)
+
+		f.Sync()
+		w.Flush()
+	} else {
+		f, err := os.OpenFile("files/inglesUser", os.O_WRONLY|os.O_APPEND, 0644)
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
+
+		w := bufio.NewWriter(f)
+		a, err := w.WriteString(original)
+		fmt.Println(a)
+		b, err := w.WriteString(" - ")
+		fmt.Println(b)
+		c, err := w.WriteString(translated)
+		fmt.Println(c)
+		d, err := w.WriteString("\n")
+		fmt.Println(d)
+
+		f.Sync()
+		w.Flush()
+	}
+}
+
+func escrArquivo2(original string) {
+	f, err := os.OpenFile("fileProgress/completedUser", os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
 
 	w := bufio.NewWriter(f)
-	a, err := w.WriteString(original)
-	fmt.Println(a)
-	b, err := w.WriteString(" - ")
-	fmt.Println(b)
-	c, err := w.WriteString(translated)
-	fmt.Println(c)
-	d, err := w.WriteString("\n")
-	fmt.Println(d)
+	w.WriteString(original)
+	w.WriteString("\n")
 
 	f.Sync()
 	w.Flush()
@@ -141,12 +261,62 @@ func getPalavra(w http.ResponseWriter, r *http.Request) {
 	randomNumber := rand.Intn(conjuntoP.tamanho)
 	json.NewEncoder(w).Encode(objPalavras[randomNumber])
 }
+
+func postNovaFrase(w http.ResponseWriter, r *http.Request) {
+	allowCORS(w)
+	original := r.FormValue("original")
+	traducao := r.FormValue("traducao")
+	if original == "" || traducao == "" {
+		json.NewEncoder(w).Encode("Erro ao tentar adicionar frase")
+	} else {
+		escrArquivo1(original, traducao)
+
+		palavra := Palavra{
+			palavraOriginal: original,
+			palavraTraducao: traducao,
+		}
+		conjuntoP.Append(&palavra)
+		conjuntoP.ShowAndUpdate()
+		json.NewEncoder(w).Encode("frase adicionada")
+	}
+}
+
+func postAlterarPeso(w http.ResponseWriter, r *http.Request) {
+	allowCORS(w)
+	if conjuntoP.tamanho == 1 {
+		json.NewEncoder(w).Encode("processo finalizado")
+	} else {
+		palavra := r.FormValue("palavra")
+		pesoString := r.FormValue("peso")
+		peso, err := strconv.Atoi(pesoString)
+
+		if err != nil {
+			fmt.Println("parser error")
+		}
+
+		contador := 0
+		var palavraInicial = conjuntoP.inicio
+		for contador < conjuntoP.tamanho {
+			if palavraInicial.palavraOriginal == palavra {
+				palavraInicial.peso += peso
+				if palavraInicial.peso <= 0 {
+					conjuntoP.Remove(palavraInicial)
+				}
+				fmt.Println(palavraInicial)
+			}
+			palavraInicial = palavraInicial.proxima
+			contador++
+		}
+	}
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 	tpl, _ := template.ParseFiles("frontend/index.html")
 
 	w.WriteHeader(http.StatusOK)
 	tpl.Execute(w, nil)
 }
+
 func pgMain(w http.ResponseWriter, r *http.Request) {
 	teste, err := r.Cookie("Email")
 	if err != nil {
@@ -166,6 +336,11 @@ func novasPalavras(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	tpl.Execute(w, nil)
+}
+
+func getTamanhoLista(w http.ResponseWriter, r *http.Request) {
+	allowCORS(w)
+	json.NewEncoder(w).Encode(conjuntoP.tamanho)
 }
 
 func getFormulario(w http.ResponseWriter, r *http.Request) {
@@ -195,7 +370,7 @@ func getFrases(w http.ResponseWriter, r *http.Request) { //Adiciona novas palavr
 	translated := r.PostForm.Get("translate")
 	fmt.Println("Tradução: ", translated)
 	escrArquivo1(original, translated)
-	http.Redirect(w, r, "/NovasPalavras", http.StatusSeeOther)
+	http.Redirect(w, r, "/main", http.StatusSeeOther)
 
 	palavra := Palavra{
 		palavraOriginal: original,
@@ -207,7 +382,6 @@ func getFrases(w http.ResponseWriter, r *http.Request) { //Adiciona novas palavr
 }
 
 func main() {
-
 	var frases []string
 
 	files, err := ioutil.ReadDir(dir) //Armazena todos arquivos do diretório files no array files
@@ -265,6 +439,7 @@ func main() {
 			p1 = frases[i]
 			p2 = frases[i+1]
 			palavra := Palavra{
+				peso:            3,
 				palavraOriginal: p1,
 				palavraTraducao: p2,
 			}
@@ -277,6 +452,10 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	go router.HandleFunc("/palavras", getPalavras).Methods("GET")
 	go router.HandleFunc("/palavra", getPalavra).Methods("GET")
+	go router.HandleFunc("/tamanho-lista", getTamanhoLista).Methods("GET")
+	go router.HandleFunc("/alterar-peso", postAlterarPeso).Methods("POST")
+	go router.HandleFunc("/post-email", sendEmailRoute).Methods("POST")
+	go router.HandleFunc("/nova-frase", postNovaFrase).Methods("POST")
 	go router.HandleFunc("/", index)
 	go router.HandleFunc("/login", getFormulario)
 	go router.HandleFunc("/main", pgMain)

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="./public/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="pop-up">
+        <div class="pop-up__content">
+            <div class="user-div">
+                <label id="user-label" for="email">E-mail</label>
+                <input id="user-input" type="email" name="email">
+                <button id="auth-btn">Autenticar</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="main">
+        <div class="main__sidebar">
+            <div class="palavras--qnt" id="totalQnt">
+            </div>
+            <div class="palavras--aprendidas" id="aprendidasQnt">
+            </div>
+            <div class="palavras--aprendendo" id="emAndamentoQnt">
+            </div>
+        </div>
+
+        <div class="main__content">
+            
+            
+            <div class="add-frase__container">
+                <input class="add-frase__input" type="text" name="fraseOriginal" placeholder="Original">
+                <input class="add-frase__input" type="text" name="fraseTraducao" placeholder="Tradução">
+                <input class="btn" type="submit" id="btn-addFrase" value="Adicionar">
+            </div>
+            <div>
+                <button id="btn-verTraducao">Ver Tradução</button><br>
+            </div>
+            <div class="card-holder">
+                <div class="card">
+                    <div class="card__side card--front" id="card-front">
+                        some random text
+                    </div>
+                    <div class="card__side card--back" id="card-back">
+                        some translate text
+                    </div>
+                </div>
+                <div class="btn-holder">
+                    <div class="btn-holder--1">
+                        <button id="btn-facil" class="btn" onclick="getRandomPalavras(-2)">Fácil</button>
+                        <button id="btn-medio" class="btn" onclick="getRandomPalavras(1)">Médio</button>
+                        <button id="btn-dificil" class="btn" onclick="getRandomPalavras(2)">Difícil</button>
+                    </div>
+                    <div class="btn-holder--2">
+                        <button class="btn" id="btn-sendEmail">Frases aprendidas (email)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
+        </script>
+    <script src="public/js/CircularLoader-v1.3.js"></script>
+    <script src="public/js/animations.js"></script>
+    <script src="public/js/async-request.js"></script>
+    <script src="public/js/card-animation.js"></script>
+    <script src="public/js/addFrase.js"></script>
+
+    <script>
+        const btnSenEmail = $('#btn-sendEmail');
+        btnSenEmail.on('click', () => {
+            $.ajax({
+                url: 'http://localhost:8080/post-email',
+                type: 'post',
+                dataType: 'html',
+                data: {
+                    userEmail: localStorage.getItem('email')
+                },
+                success: function (data) {
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
